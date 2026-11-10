@@ -83,14 +83,54 @@ model User {
   role         Role      @default(org_admin)
   // TOTP secret is stored encrypted at the application layer, never in clear text.
   totpSecret   String?   @map("totp_secret")
+  totpEnabled  Boolean   @default(false) @map("totp_enabled")
   failedLogins Int       @default(0) @map("failed_logins")
   lockedUntil  DateTime? @map("locked_until")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  // Password-reset token is stored only as a hash, with a short expiry.
+  resetTokenHash      String?   @map("reset_token_hash")
+  resetTokenExpiresAt DateTime? @map("reset_token_expires_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
 
-  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  sessions    Session[]
+  backupCodes BackupCode[]
 
   @@index([orgId])
   @@map("users")
+}
+
+// A refresh-token session. The refresh token itself is never stored; only a hash
+// is, so a database leak cannot be replayed into a login. Each use rotates the
+// token (the hash is replaced), and sign-out revokes the row.
+model Session {
+  id               String    @id @default(cuid())
+  userId           String    @map("user_id")
+  refreshTokenHash String    @map("refresh_token_hash")
+  ip               String?
+  userAgent        String?   @map("user_agent")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  lastUsedAt       DateTime  @default(now()) @map("last_used_at")
+  revokedAt        DateTime? @map("revoked_at")
+  expiresAt        DateTime  @map("expires_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+// One-time recovery codes for two-factor sign-in, stored only as hashes. A code is
+// burned (usedAt set) the first time it works.
+model BackupCode {
+  id       String    @id @default(cuid())
+  userId   String    @map("user_id")
+  codeHash String    @map("code_hash")
+  usedAt   DateTime? @map("used_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("backup_codes")
 }
 
 // An employee the organisation is authorised to test. Personal data here is

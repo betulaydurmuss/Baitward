@@ -11,6 +11,8 @@ import { createAuthRouter } from './auth/router.js';
 import { createTargetsRouter } from './targets/router.js';
 import { createTemplatesRouter } from './templates/router.js';
 import { createCampaignsRouter } from './campaigns/router.js';
+import { createTrackingRouter } from './tracking/router.js';
+import { createDashboardRouter } from './stats/router.js';
 import { errorHandler, notFound } from './middleware/error.js';
 
 export function createApp(prisma: PrismaClient) {
@@ -34,6 +36,11 @@ export function createApp(prisma: PrismaClient) {
   app.use('/api/targets', createTargetsRouter(prisma));
   app.use('/api/templates', createTemplatesRouter(prisma));
   app.use('/api/campaigns', createCampaignsRouter(prisma));
+  app.use('/api/dashboard', createDashboardRouter(prisma));
+
+  // Public tracking endpoints (open pixel, click, submit) live at the root so the
+  // links embedded in emails are short.
+  app.use('/', createTrackingRouter(prisma));
 
   // Unmatched routes and the final error handler.
   app.use(notFound);

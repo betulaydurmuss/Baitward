@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import type { PrismaClient } from '@prisma/client';
 import { createCampaignService } from './service.js';
+import { createStatsService } from '../stats/service.js';
 import { requireAuth } from '../middleware/auth.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { AppError } from '../lib/http-error.js';
@@ -20,6 +21,7 @@ const createSchema = z
 
 export function createCampaignsRouter(prisma: PrismaClient): Router {
   const service = createCampaignService(prisma);
+  const stats = createStatsService(prisma);
   const router = Router();
   router.use(requireAuth);
 
@@ -40,6 +42,13 @@ export function createCampaignsRouter(prisma: PrismaClient): Router {
     '/:id',
     asyncHandler(async (req, res) => {
       res.json(await service.get(req.auth!.orgId, id(req)));
+    }),
+  );
+
+  router.get(
+    '/:id/stats',
+    asyncHandler(async (req, res) => {
+      res.json(await stats.getCampaignStats(req.auth!.orgId, id(req)));
     }),
   );
 

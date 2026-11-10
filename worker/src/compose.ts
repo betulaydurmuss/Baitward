@@ -22,6 +22,7 @@ export type ComposedEmail = { subject: string; html: string };
 export function compose(input: ComposeInput): ComposedEmail {
   const clickUrl = `${input.apiBaseUrl}/c/${input.token}`;
   const pixelUrl = `${input.apiBaseUrl}/t/${input.token}`;
+  const reportUrl = `${input.apiBaseUrl}/r/${input.token}`;
 
   const vars: Record<string, string> = {
     first_name: input.target.firstName ?? '',
@@ -30,6 +31,7 @@ export function compose(input: ComposeInput): ComposedEmail {
     company: input.companyName,
     email: input.target.email,
     tracking_link: clickUrl,
+    report_link: reportUrl,
   };
 
   // Replace {{ var }} tokens; unknown variables collapse to an empty string.

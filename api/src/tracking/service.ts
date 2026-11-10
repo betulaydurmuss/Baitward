@@ -25,6 +25,18 @@ export function createTrackingService(prisma: PrismaClient) {
   }
 
   return {
+    // Loads everything needed to render a landing page or resolve training for a
+    // token: the recipient, the campaign, its org and its landing page.
+    loadContext(token: string) {
+      return prisma.campaignTarget.findUnique({
+        where: { token },
+        include: {
+          target: true,
+          campaign: { include: { org: true, landingPage: true } },
+        },
+      });
+    },
+
     recordOpen: (token: string, meta: EventMeta) => recordOnce(token, 'opened', meta),
 
     async recordClick(token: string, meta: EventMeta) {
@@ -41,5 +53,7 @@ export function createTrackingService(prisma: PrismaClient) {
     },
 
     recordReport: (token: string, meta: EventMeta) => recordOnce(token, 'reported', meta),
+
+    recordTrained: (token: string, meta: EventMeta) => recordOnce(token, 'trained', meta),
   };
 }

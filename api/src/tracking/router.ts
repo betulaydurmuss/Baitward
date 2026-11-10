@@ -6,7 +6,10 @@ import type { PrismaClient } from '@prisma/client';
 import { createTrackingService } from './service.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { getClientIp, getUserAgent } from '../lib/request.js';
+import { renderTemplate } from '../lib/render.js';
 import { env } from '../env.js';
+
+const trainingUrl = (token: string) => `${env.WEB_ORIGIN}/training/${token}`;
 
 // A 1x1 transparent GIF, returned by the open-tracking pixel.
 const PIXEL = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
@@ -35,22 +38,42 @@ export function createTrackingRouter(prisma: PrismaClient): Router {
     }),
   );
 
-  // Click — records the click, then sends the recipient to the awareness page.
+  // Click — records the click, then shows the campaign's landing page if it has one
+  // (its form posts to /s/:token). With no landing page, go straight to training.
   router.get(
     '/c/:token',
     asyncHandler(async (req, res) => {
-      await tracking.recordClick(req.params.token!, meta(req));
-      res.redirect(302, AWARENESS_URL);
+      const token = req.params.token!;
+      await tracking.recordClick(token, meta(req));
+
+      const ctx = await tracking.loadContext(token);
+      const landing = ctx?.campaign.landingPage;
+      if (ctx && landing) {
+        const html = renderTemplate(landing.html, {
+          first_name: ctx.target.firstName ?? '',
+          last_name: ctx.target.lastName ?? '',
+          department: ctx.target.department ?? '',
+          company: ctx.campaign.org.name,
+          email: ctx.target.email,
+          // The form action and the onward training link, filled in per recipient.
+          submit_url: `${env.API_BASE_URL}/s/${token}`,
+          training_url: trainingUrl(token),
+        });
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.send(html);
+        return;
+      }
+      res.redirect(302, trainingUrl(token));
     }),
   );
 
   // Submit — records that a fake form was submitted. The request body is never read
-  // or stored; only the event and technical metadata are kept.
+  // or stored; only the event and technical metadata are kept. Then: training.
   router.post(
     '/s/:token',
     asyncHandler(async (req, res) => {
       await tracking.recordSubmit(req.params.token!, meta(req));
-      res.redirect(302, AWARENESS_URL);
+      res.redirect(302, trainingUrl(req.params.token!));
     }),
   );
 

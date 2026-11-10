@@ -12,6 +12,7 @@ import { computeSendDelays } from './drip.js';
 
 export type CampaignInput = {
   templateId: string;
+  landingPageId?: string | null;
   scheduledAt?: Date | null;
   dripPerMin?: number;
   targetIds?: string[];
@@ -75,6 +76,14 @@ export function createCampaignService(prisma: PrismaClient) {
       });
       if (!template) throw new AppError(400, 'bad_template', 'Template not found');
 
+      if (input.landingPageId) {
+        const landing = await prisma.landingPage.findFirst({
+          where: { id: input.landingPageId, orgId },
+          select: { id: true },
+        });
+        if (!landing) throw new AppError(400, 'bad_landing', 'Landing page not found');
+      }
+
       const targetIds = await resolveTargetIds(orgId, input);
       if (targetIds.length === 0) {
         throw new AppError(400, 'no_targets', 'Select at least one valid target');
@@ -92,6 +101,7 @@ export function createCampaignService(prisma: PrismaClient) {
           data: {
             orgId,
             templateId: input.templateId,
+            landingPageId: input.landingPageId ?? null,
             scheduledAt: input.scheduledAt ?? null,
             dripPerMin: input.dripPerMin ?? 20,
             status: 'draft',

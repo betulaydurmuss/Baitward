@@ -13,6 +13,9 @@ import { createTemplatesRouter } from './templates/router.js';
 import { createCampaignsRouter } from './campaigns/router.js';
 import { createTrackingRouter } from './tracking/router.js';
 import { createDashboardRouter } from './stats/router.js';
+import { createLandingRouter } from './landing/router.js';
+import { createTrainingRouter } from './training/router.js';
+import { createPublicTrainingRouter } from './training/public-router.js';
 import { errorHandler, notFound } from './middleware/error.js';
 
 export function createApp(prisma: PrismaClient) {
@@ -36,7 +39,12 @@ export function createApp(prisma: PrismaClient) {
   app.use('/api/targets', createTargetsRouter(prisma));
   app.use('/api/templates', createTemplatesRouter(prisma));
   app.use('/api/campaigns', createCampaignsRouter(prisma));
+  app.use('/api/landing-pages', createLandingRouter(prisma));
+  app.use('/api/training', createTrainingRouter(prisma));
   app.use('/api/dashboard', createDashboardRouter(prisma));
+
+  // Public training endpoints, identified by the recipient's token (no auth).
+  app.use('/api/public/training', createPublicTrainingRouter(prisma));
 
   // Public tracking endpoints (open pixel, click, submit) live at the root so the
   // links embedded in emails are short.

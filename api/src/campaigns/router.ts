@@ -10,6 +10,7 @@ import { AppError } from '../lib/http-error.js';
 const createSchema = z
   .object({
     templateId: z.string().min(1),
+    landingPageId: z.string().optional(),
     scheduledAt: z.coerce.date().optional(),
     dripPerMin: z.number().int().min(1).max(600).optional(),
     targetIds: z.array(z.string()).optional(),

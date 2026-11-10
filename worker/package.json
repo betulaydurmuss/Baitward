@@ -3,20 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bullmq": "^5.28.1",
-    "ioredis": "^5.4.1"
+    "dotenv": "^16.6.1",
+    "ioredis": "^5.4.1",
+    "nodemailer": "^6.10.1"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@types/nodemailer": "^6.4.24",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.5"

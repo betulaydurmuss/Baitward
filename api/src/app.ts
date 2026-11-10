@@ -8,7 +8,9 @@ import type { PrismaClient } from '@prisma/client';
 import { env } from './env.js';
 import { healthRouter } from './routes/health.js';
 import { createAuthRouter } from './auth/router.js';
-import { createTargetsRouter } from './org/targets-router.js';
+import { createTargetsRouter } from './targets/router.js';
+import { createTemplatesRouter } from './templates/router.js';
+import { createCampaignsRouter } from './campaigns/router.js';
 import { errorHandler, notFound } from './middleware/error.js';
 
 export function createApp(prisma: PrismaClient) {
@@ -30,6 +32,8 @@ export function createApp(prisma: PrismaClient) {
   app.use('/api', healthRouter);
   app.use('/api/auth', createAuthRouter(prisma));
   app.use('/api/targets', createTargetsRouter(prisma));
+  app.use('/api/templates', createTemplatesRouter(prisma));
+  app.use('/api/campaigns', createCampaignsRouter(prisma));
 
   // Unmatched routes and the final error handler.
   app.use(notFound);

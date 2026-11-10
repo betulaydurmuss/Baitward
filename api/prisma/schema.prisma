@@ -1,0 +1,190 @@
+// Baitward data model.
+//
+// Design rule that outranks every other: the platform never stores what a target
+// typed into a fake form. The `events` table records only that a `submitted` event
+// happened, plus technical metadata — never the submitted content itself.
+//
+// Every tenant-owned row carries `orgId`; the service layer filters every query by
+// it so one organisation can never see or target another.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Roles across the platform. super_admin manages the platform itself; the other
+// two live inside a single customer organisation.
+enum Role {
+  super_admin
+  org_admin
+  security_analyst
+}
+
+// UI and content language for a person or a template.
+enum Locale {
+  tr
+  en
+}
+
+// How convincing a simulated email is — used to grade difficulty over time.
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+enum CampaignStatus {
+  draft
+  scheduled
+  sending
+  completed
+  cancelled
+}
+
+// The only facts the platform records about a target's behaviour. Note what is
+// absent: there is no field for form contents or credentials.
+enum EventType {
+  sent
+  opened
+  clicked
+  submitted
+  reported
+  trained
+}
+
+// A customer organisation (tenant). Campaigns may only target its verified domain.
+model Organization {
+  id                String   @id @default(cuid())
+  name              String
+  plan              String   @default("trial")
+  verifiedDomain    String?  @map("verified_domain")
+  // When a retention window passes, behavioural data is deleted (KVKK).
+  dataRetentionDays Int      @default(180) @map("data_retention_days")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  users     User[]
+  targets   Target[]
+  templates EmailTemplate[]
+  campaigns Campaign[]
+
+  @@map("organizations")
+}
+
+// A person who can sign in to manage simulations for one organisation.
+model User {
+  id           String    @id @default(cuid())
+  orgId        String    @map("org_id")
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         Role      @default(org_admin)
+  // TOTP secret is stored encrypted at the application layer, never in clear text.
+  totpSecret   String?   @map("totp_secret")
+  failedLogins Int       @default(0) @map("failed_logins")
+  lockedUntil  DateTime? @map("locked_until")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@map("users")
+}
+
+// An employee the organisation is authorised to test. Personal data here is
+// minimised and subject to the organisation's retention window.
+model Target {
+  id         String   @id @default(cuid())
+  orgId      String   @map("org_id")
+  email      String
+  firstName  String?  @map("first_name")
+  lastName   String?  @map("last_name")
+  department String?
+  locale     Locale   @default(tr)
+  groups     String[] @default([])
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  org             Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  campaignTargets CampaignTarget[]
+
+  // One organisation cannot hold the same employee address twice.
+  @@unique([orgId, email])
+  @@index([orgId])
+  @@map("targets")
+}
+
+// A reusable, localised email used to compose a campaign's messages.
+model EmailTemplate {
+  id         String     @id @default(cuid())
+  orgId      String     @map("org_id")
+  name       String
+  locale     Locale     @default(tr)
+  subject    String
+  html       String
+  difficulty Difficulty @default(medium)
+  // e.g. shipping, hr, password-reset — the pretext category.
+  category   String?
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  campaigns Campaign[]
+
+  @@index([orgId])
+  @@map("email_templates")
+}
+
+// A scheduled run of a template against a set of targets, sent gradually (drip).
+model Campaign {
+  id          String         @id @default(cuid())
+  orgId       String         @map("org_id")
+  templateId  String         @map("template_id")
+  // Landing page relation is added when landing pages arrive (Phase 4); kept as a
+  // plain nullable column until then.
+  landingPageId String?      @map("landing_page_id")
+  scheduledAt DateTime?      @map("scheduled_at")
+  dripPerMin  Int            @default(20) @map("drip_per_min")
+  status      CampaignStatus @default(draft)
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  org      Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  template EmailTemplate    @relation(fields: [templateId], references: [id])
+  targets  CampaignTarget[]
+
+  @@index([orgId])
+  @@map("campaigns")
+}
+
+// Join between a campaign and one target, carrying the unique tracking token that
+// identifies this recipient without ever putting their name or email in a URL.
+model CampaignTarget {
+  id         String    @id @default(cuid())
+  campaignId String    @map("campaign_id")
+  targetId   String    @map("target_id")
+  token      String    @unique
+  sentAt     DateTime? @map("sent_at")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  target   Target   @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  events   Event[]
+
+  @@index([campaignId])
+  @@map("campaign_targets")
+}
+
+// A single recorded behaviour. The body of any submitted form is discarded before
+// this row is written; only the event type and technical metadata remain.
+model Event {
+  id               String    @id @default(cuid())
+  campaignTargetId String    @map("campaign_target_id")
+  type             EventType
+  ip               String?
+  userAgent        String?   @map("user_agent")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  campaignTarget CampaignTarget @relation(fields: [campaignTargetId], references: [id], onDelete: Cascade)
+
+  @@index([campaignTargetId])
+  @@map("events")
+}

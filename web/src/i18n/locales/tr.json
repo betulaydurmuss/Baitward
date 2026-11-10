@@ -3,14 +3,63 @@
   "tagline": "Yetkili oltalama simülasyonu ve güvenlik farkındalık eğitimi.",
   "nav": {
     "overview": "Genel bakış",
-    "brand": "Marka",
+    "campaigns": "Kampanyalar",
+    "targets": "Hedefler",
+    "templates": "Şablonlar",
     "sessions": "Oturumlar",
     "signIn": "Giriş yap",
     "signOut": "Çıkış yap"
   },
   "language": "Dil",
   "common": {
-    "loading": "Yükleniyor…"
+    "loading": "Yükleniyor…",
+    "delete": "Sil"
+  },
+  "targets": {
+    "title": "Hedefler",
+    "email": "E-posta",
+    "firstName": "Ad",
+    "department": "Departman",
+    "groups": "Gruplar",
+    "add": "Hedef ekle",
+    "empty": "Henüz hedef yok. Test etmeye yetkili olduğunuz çalışanları ekleyin."
+  },
+  "templates": {
+    "title": "E-posta şablonları",
+    "name": "Ad",
+    "locale": "Dil",
+    "subject": "Konu",
+    "html": "HTML gövde",
+    "vars": "Değişkenler: {{first_name}}, {{department}}, {{company}}, {{tracking_link}}",
+    "difficulty": "Zorluk",
+    "easy": "Kolay",
+    "medium": "Orta",
+    "hard": "Zor",
+    "category": "Kategori",
+    "add": "Şablon ekle",
+    "empty": "Henüz şablon yok. İlk simülasyon e-postanızı oluşturun."
+  },
+  "campaigns": {
+    "title": "Kampanyalar",
+    "template": "Şablon",
+    "audience": "Hedef kitle",
+    "allTargets": "Tüm hedefler",
+    "group": "Grup",
+    "dripPerMin": "Gönderim hızı (dakikada)",
+    "scheduledAt": "Zamanlama (isteğe bağlı)",
+    "create": "Kampanya oluştur",
+    "choose": "Bir şablon seçin",
+    "recipients": "Alıcılar",
+    "status": "Durum",
+    "launch": "Başlat",
+    "empty": "Henüz kampanya yok.",
+    "statuses": {
+      "draft": "Taslak",
+      "scheduled": "Zamanlandı",
+      "sending": "Gönderiliyor",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    }
   },
   "home": {
     "title": "Çalışanlarınızı oltalamaya karşı güvenle eğitin.",
@@ -18,17 +67,6 @@
     "guaranteeTitle": "Tasarımı gereği savunma odaklı",
     "guarantee": "Girilen veri asla saklanmaz. Sahte formun gönderimi yakalanır, içeriği atılır ve yalnızca \"veri girildi\" olayı kaydedilir.",
     "status": "Erken geliştirme — panel sonraki bir aşamada gelecek."
-  },
-  "brand": {
-    "title": "Marka",
-    "intro": "Baitward kimliği: tek bir indigo vurgu, açık ve sakin bir yüzey, metin için Inter ve sayılar için JetBrains Mono.",
-    "logo": "Logo",
-    "logoFull": "Tam logo",
-    "logoIcon": "Yalnızca ikon",
-    "palette": "Renk paleti",
-    "typography": "Tipografi",
-    "sansLabel": "Inter — arayüz metni",
-    "monoLabel": "JetBrains Mono — sayılar, token'lar, süreler"
   },
   "auth": {
     "errors": {

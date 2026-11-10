@@ -1,47 +1,37 @@
 // Creates the first administrator for a new organisation, from the command line.
 // The password is read with the echo turned off and is never written to the repo,
 // to a log, or to this file. Run with: npm run admin:create --workspace=api
-import readline from 'node:readline/promises';
+import readline from 'node:readline';
 import { stdin, stdout } from 'node:process';
 import { z } from 'zod';
 import type { Role } from '@prisma/client';
 import { prisma } from '../src/lib/prisma.js';
 import { hashPassword } from '../src/lib/password.js';
 
-// Reads a line without echoing the typed characters (for the password).
-function readHidden(prompt: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    stdout.write(prompt);
-    stdin.setRawMode?.(true);
-    stdin.resume();
-    stdin.setEncoding('utf8');
-    let value = '';
-    const onData = (char: string) => {
-      switch (char) {
-        case '\n':
-        case '\r':
-        case '\u0004': // Ctrl-D
-          stdin.setRawMode?.(false);
-          stdin.pause();
-          stdin.removeListener('data', onData);
-          stdout.write('\n');
-          resolve(value);
-          break;
-        case '\u0003': // Ctrl-C
-          stdin.setRawMode?.(false);
-          stdin.removeListener('data', onData);
-          stdout.write('\n');
-          reject(new Error('Cancelled'));
-          break;
-        case '\u007f': // Backspace
-        case '\b':
-          value = value.slice(0, -1);
-          break;
-        default:
-          value += char;
-      }
+// A readline interface whose output we can silence while a password is typed.
+type MutableRl = readline.Interface & {
+  stdoutMuted?: boolean;
+  output?: NodeJS.WriteStream;
+  _writeToOutput?: (s: string) => void;
+};
+
+function ask(rl: readline.Interface, question: string): Promise<string> {
+  return new Promise((resolve) => rl.question(question, resolve));
+}
+
+// Prints the prompt, then hides every character the user types.
+function askPassword(rl: MutableRl, question: string): Promise<string> {
+  return new Promise((resolve) => {
+    stdout.write(question);
+    rl.stdoutMuted = true;
+    rl._writeToOutput = (str: string) => {
+      if (!rl.stdoutMuted) rl.output?.write(str);
     };
-    stdin.on('data', onData);
+    rl.question('', (value) => {
+      rl.stdoutMuted = false;
+      stdout.write('\n');
+      resolve(value);
+    });
   });
 }
 
@@ -52,15 +42,38 @@ const schema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
+// Collects the four inputs, preferring environment variables when they are all
+// present (useful for scripting/CI), and otherwise prompting interactively.
+async function collectInput() {
+  const env = {
+    orgName: process.env.ADMIN_ORG,
+    email: process.env.ADMIN_EMAIL,
+    role: process.env.ADMIN_ROLE,
+    password: process.env.ADMIN_PASSWORD,
+  };
+  if (env.orgName && env.email && env.password) {
+    return {
+      orgName: env.orgName,
+      email: env.email,
+      roleInput: env.role?.trim() || 'org_admin',
+      password: env.password,
+    };
+  }
+
+  const rl: MutableRl = readline.createInterface({ input: stdin, output: stdout });
+  try {
+    const orgName = await ask(rl, 'Organisation name: ');
+    const email = await ask(rl, 'Admin email: ');
+    const roleInput = (await ask(rl, 'Role [org_admin]: ')).trim() || 'org_admin';
+    const password = await askPassword(rl, 'Password (hidden): ');
+    return { orgName, email, roleInput, password };
+  } finally {
+    rl.close();
+  }
+}
+
 async function main() {
-  const rl = readline.createInterface({ input: stdin, output: stdout });
-
-  const orgName = await rl.question('Organisation name: ');
-  const email = await rl.question('Admin email: ');
-  const roleInput = (await rl.question('Role [org_admin]: ')).trim() || 'org_admin';
-  rl.close();
-
-  const password = await readHidden('Password (hidden): ');
+  const { orgName, email, roleInput, password } = await collectInput();
 
   const parsed = schema.safeParse({ orgName, email, role: roleInput, password });
   if (!parsed.success) {

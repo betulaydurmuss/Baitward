@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './styles/global.css';
 import './i18n';
 import { App } from './App';
+import { AuthProvider } from './auth/AuthContext';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,9 @@ createRoot(rootEl).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

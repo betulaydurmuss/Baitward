@@ -4,6 +4,7 @@
 //
 // Note what is NOT seeded: no passwords and no captured form data. The first admin
 // user is created later through the CLI, never checked into the repo.
+import 'dotenv/config';
 import { PrismaClient, Locale, Difficulty } from '@prisma/client';
 
 const prisma = new PrismaClient();

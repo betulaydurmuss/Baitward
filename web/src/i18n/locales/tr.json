@@ -3,6 +3,7 @@
   "tagline": "Yetkili oltalama simülasyonu ve güvenlik farkındalık eğitimi.",
   "nav": {
     "overview": "Genel bakış",
+    "dashboard": "Panel",
     "campaigns": "Kampanyalar",
     "targets": "Hedefler",
     "templates": "Şablonlar",
@@ -60,6 +61,44 @@
       "completed": "Tamamlandı",
       "cancelled": "İptal edildi"
     }
+  },
+  "status": {
+    "sent": "Gönderildi",
+    "opened": "Açıldı",
+    "clicked": "Tıkladı",
+    "submitted": "Veri girdi",
+    "reported": "Bildirdi",
+    "trained": "Eğitildi"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "recent": "Son kampanyalar"
+  },
+  "detail": {
+    "funnel": "Kampanya hunisi",
+    "byDepartment": "Departmana göre",
+    "noData": "Henüz etkinlik yok."
+  },
+  "styleguide": {
+    "title": "Stil rehberi",
+    "colors": "Renkler",
+    "typography": "Tipografi",
+    "controls": "Kontroller",
+    "statuses": "Durum dili",
+    "states": "Ekran durumları",
+    "emptyExample": "Burada henüz bir şey yok"
+  },
+  "caught": {
+    "title": "Bu bir oltalama simülasyonuydu",
+    "body": "Zararı yok — bu, kurumunuzun yaptığı güvenli bir testti. İşte ipuçları:",
+    "reportedTitle": "Bildirdiğiniz için teşekkürler",
+    "reportedBody": "Şüpheli mesajları bildirmek tam da yapılması gereken şeydir. Dikkat edilecekler:",
+    "tips": [
+      "Yalnızca görünen ada değil, gönderenin adresine bakın.",
+      "Tıklamadan önce bağlantının üzerine gelip gerçek adresi görün.",
+      "Aciliyet hissi ve beklenmeyen eklere karşı dikkatli olun.",
+      "Emin değilseniz tıklamak yerine bildirin."
+    ]
   },
   "home": {
     "title": "Çalışanlarınızı oltalamaya karşı güvenle eğitin.",

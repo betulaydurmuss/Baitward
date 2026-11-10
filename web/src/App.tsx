@@ -9,6 +9,10 @@ import { SessionsPage } from './pages/SessionsPage';
 import { TargetsPage } from './pages/TargetsPage';
 import { TemplatesPage } from './pages/TemplatesPage';
 import { CampaignsPage } from './pages/CampaignsPage';
+import { CampaignDetailPage } from './pages/CampaignDetailPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { StyleguidePage } from './pages/StyleguidePage';
+import { CaughtPage } from './pages/CaughtPage';
 import { SignInPage } from './pages/auth/SignInPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
@@ -35,6 +39,7 @@ export function App() {
           <Link to="/">{t('nav.overview')}</Link>
           {status === 'authenticated' ? (
             <>
+              <Link to="/dashboard">{t('nav.dashboard')}</Link>
               <Link to="/campaigns">{t('nav.campaigns')}</Link>
               <Link to="/targets">{t('nav.targets')}</Link>
               <Link to="/templates">{t('nav.templates')}</Link>
@@ -53,16 +58,34 @@ export function App() {
       <main className="app-main">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/caught" element={<CaughtPage />} />
+          <Route path="/styleguide" element={<StyleguidePage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/2fa-setup" element={<TwoFactorSetupPage />} />
           <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/campaigns"
             element={
               <ProtectedRoute>
                 <CampaignsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/campaigns/:id"
+            element={
+              <ProtectedRoute>
+                <CampaignDetailPage />
               </ProtectedRoute>
             }
           />

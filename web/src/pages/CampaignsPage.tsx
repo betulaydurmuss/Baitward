@@ -1,4 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { api, ApiError } from '../lib/api';
@@ -167,7 +168,9 @@ export function CampaignsPage() {
           <tbody>
             {campaigns.data.campaigns.map((c) => (
               <tr key={c.id}>
-                <td>{c.template?.name ?? '—'}</td>
+                <td>
+                  <Link to={`/campaigns/${c.id}`}>{c.template?.name ?? '—'}</Link>
+                </td>
                 <td>{c._count.targets}</td>
                 <td>
                   <span

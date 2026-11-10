@@ -3,6 +3,7 @@
   "tagline": "Authorized phishing simulation and security awareness training.",
   "nav": {
     "overview": "Overview",
+    "dashboard": "Dashboard",
     "campaigns": "Campaigns",
     "targets": "Targets",
     "templates": "Templates",
@@ -60,6 +61,44 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     }
+  },
+  "status": {
+    "sent": "Sent",
+    "opened": "Opened",
+    "clicked": "Clicked",
+    "submitted": "Submitted",
+    "reported": "Reported",
+    "trained": "Trained"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "recent": "Recent campaigns"
+  },
+  "detail": {
+    "funnel": "Campaign funnel",
+    "byDepartment": "By department",
+    "noData": "No activity yet."
+  },
+  "styleguide": {
+    "title": "Style guide",
+    "colors": "Colours",
+    "typography": "Typography",
+    "controls": "Controls",
+    "statuses": "Status language",
+    "states": "Screen states",
+    "emptyExample": "Nothing here yet"
+  },
+  "caught": {
+    "title": "This was a phishing simulation",
+    "body": "No harm done — this was a safe test run by your organisation. Here is what gave it away:",
+    "reportedTitle": "Thank you for reporting",
+    "reportedBody": "Reporting suspicious messages is exactly the right move. Here is what to keep watching for:",
+    "tips": [
+      "Check the sender's address, not just the display name.",
+      "Hover over links before clicking to see where they really go.",
+      "Be wary of urgency and unexpected attachments.",
+      "When in doubt, report it instead of clicking."
+    ]
   },
   "home": {
     "title": "Train your people against phishing, safely.",

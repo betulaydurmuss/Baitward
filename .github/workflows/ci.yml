@@ -1,0 +1,34 @@
+name: CI
+
+# Run the full check on every push and pull request to main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# The workflow only reads the repository; grant nothing beyond that.
+permissions: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # npm ci installs exactly what the lockfile pins — reproducible builds.
+      - run: npm ci
+
+      # Generate the Prisma client so type-checking sees the database types.
+      - run: npm run prisma:generate --workspace=api
+
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test

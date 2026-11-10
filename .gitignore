@@ -1,0 +1,38 @@
+# Dependencies — installed from the lockfile, never committed
+node_modules/
+
+# Build output — regenerated from source on every build
+dist/
+build/
+*.tsbuildinfo
+
+# Secrets — real credentials never enter the repo; .env.example is the template
+.env
+.env.*
+!.env.example
+
+# Prisma local artifacts — generated client is rebuilt from schema.prisma
+**/generated/
+**/.prisma/
+
+# Test and coverage output — reproducible from `npm test`
+coverage/
+
+# Generated reports and uploads — runtime data, not source
+storage/
+uploads/
+
+# Editor and OS noise — machine-specific, irrelevant to the project
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# AI tooling stays local — never published to the repo
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Assignment material — the brief and any local prompt file stay off the repo
+Oltalama_Simulasyon_Proje_Betulay.pdf
+prompt.txt

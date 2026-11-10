@@ -3,9 +3,15 @@
   "tagline": "Authorized phishing simulation and security awareness training.",
   "nav": {
     "overview": "Overview",
-    "brand": "Brand"
+    "brand": "Brand",
+    "sessions": "Sessions",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
   },
   "language": "Language",
+  "common": {
+    "loading": "Loading…"
+  },
   "home": {
     "title": "Train your people against phishing, safely.",
     "lede": "Baitward lets a company test and train its own employees with controlled, authorized simulations — measuring who opens, clicks and submits, and teaching the moment someone slips.",
@@ -23,5 +29,60 @@
     "typography": "Typography",
     "sansLabel": "Inter — interface text",
     "monoLabel": "JetBrains Mono — numbers, tokens, durations"
+  },
+  "auth": {
+    "errors": {
+      "generic": "Something went wrong. Please try again."
+    },
+    "signIn": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "twoFactorTitle": "Two-factor code",
+      "code": "Authentication code",
+      "verify": "Verify",
+      "forgot": "Forgot password?",
+      "signUpLink": "Create an account"
+    },
+    "signUp": {
+      "title": "Create your organisation",
+      "orgName": "Organisation name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Continue",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "email": "Email",
+      "submit": "Send reset link",
+      "sent": "If that email is registered, a reset link is on its way.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "done": "Your password has been reset. You can now sign in."
+    },
+    "twoFactor": {
+      "setupTitle": "Set up two-factor authentication",
+      "scan": "Scan this code with an authenticator app (Google Authenticator, 1Password…).",
+      "manualKey": "Or enter this key manually:",
+      "enterCode": "Enter the 6-digit code",
+      "enable": "Enable two-factor",
+      "backupTitle": "Save your backup codes",
+      "backupIntro": "Each code works once. Keep them somewhere safe — they are shown only now.",
+      "done": "Done"
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "current": "This device",
+      "revoke": "Revoke",
+      "revokeAll": "Sign out everywhere",
+      "empty": "No active sessions."
+    }
   }
 }

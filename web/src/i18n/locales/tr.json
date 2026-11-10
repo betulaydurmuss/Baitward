@@ -3,9 +3,15 @@
   "tagline": "Yetkili oltalama simülasyonu ve güvenlik farkındalık eğitimi.",
   "nav": {
     "overview": "Genel bakış",
-    "brand": "Marka"
+    "brand": "Marka",
+    "sessions": "Oturumlar",
+    "signIn": "Giriş yap",
+    "signOut": "Çıkış yap"
   },
   "language": "Dil",
+  "common": {
+    "loading": "Yükleniyor…"
+  },
   "home": {
     "title": "Çalışanlarınızı oltalamaya karşı güvenle eğitin.",
     "lede": "Baitward, bir kurumun kendi çalışanlarını kontrollü ve yetkili simülasyonlarla test edip eğitmesini sağlar — kimin açtığını, tıkladığını ve veri girdiğini ölçer ve hata yapıldığı anda eğitir.",
@@ -23,5 +29,60 @@
     "typography": "Tipografi",
     "sansLabel": "Inter — arayüz metni",
     "monoLabel": "JetBrains Mono — sayılar, token'lar, süreler"
+  },
+  "auth": {
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "signIn": {
+      "title": "Giriş yap",
+      "email": "E-posta",
+      "password": "Parola",
+      "submit": "Giriş yap",
+      "twoFactorTitle": "İki adımlı doğrulama kodu",
+      "code": "Doğrulama kodu",
+      "verify": "Doğrula",
+      "forgot": "Parolanızı mı unuttunuz?",
+      "signUpLink": "Hesap oluştur"
+    },
+    "signUp": {
+      "title": "Kurumunuzu oluşturun",
+      "orgName": "Kurum adı",
+      "email": "E-posta",
+      "password": "Parola",
+      "submit": "Devam et",
+      "haveAccount": "Zaten hesabınız var mı?",
+      "signInLink": "Giriş yap"
+    },
+    "forgot": {
+      "title": "Parolanızı sıfırlayın",
+      "email": "E-posta",
+      "submit": "Sıfırlama bağlantısı gönder",
+      "sent": "Bu e-posta kayıtlıysa, sıfırlama bağlantısı gönderildi.",
+      "back": "Girişe dön"
+    },
+    "reset": {
+      "title": "Yeni bir parola belirleyin",
+      "newPassword": "Yeni parola",
+      "submit": "Parolayı sıfırla",
+      "done": "Parolanız sıfırlandı. Artık giriş yapabilirsiniz."
+    },
+    "twoFactor": {
+      "setupTitle": "İki adımlı doğrulamayı kurun",
+      "scan": "Bu kodu bir kimlik doğrulama uygulamasıyla tarayın (Google Authenticator, 1Password…).",
+      "manualKey": "Veya bu anahtarı elle girin:",
+      "enterCode": "6 haneli kodu girin",
+      "enable": "İki adımlı doğrulamayı etkinleştir",
+      "backupTitle": "Yedek kodlarınızı kaydedin",
+      "backupIntro": "Her kod bir kez çalışır. Güvenli bir yerde saklayın — yalnızca şimdi gösteriliyor.",
+      "done": "Tamam"
+    },
+    "sessions": {
+      "title": "Etkin oturumlar",
+      "current": "Bu cihaz",
+      "revoke": "Sonlandır",
+      "revokeAll": "Her yerde çıkış yap",
+      "empty": "Etkin oturum yok."
+    }
   }
 }

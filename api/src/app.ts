@@ -1,16 +1,39 @@
 // Builds the Express application without starting a server, so tests can drive it
 // in-process with supertest. Server startup lives in index.ts.
 import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import type { PrismaClient } from '@prisma/client';
+import { env } from './env.js';
 import { healthRouter } from './routes/health.js';
+import { createAuthRouter } from './auth/router.js';
+import { createTargetsRouter } from './org/targets-router.js';
+import { errorHandler, notFound } from './middleware/error.js';
 
-export function createApp() {
+export function createApp(prisma: PrismaClient) {
   const app = express();
 
-  // Parse JSON bodies; individual routes validate their shape with zod.
-  app.use(express.json());
+  // Do not advertise the framework.
+  app.disable('x-powered-by');
+  // One proxy hop in deployment; makes req.ip and rate limiting see the real client.
+  app.set('trust proxy', 1);
 
-  // All API routes are mounted under /api.
+  // Secure headers (CSP, HSTS, no-sniff, etc.).
+  app.use(helmet());
+  // Only our own web origin may call the API, and it may send the cookie.
+  app.use(cors({ origin: env.WEB_ORIGIN, credentials: true }));
+
+  app.use(express.json());
+  app.use(cookieParser());
+
   app.use('/api', healthRouter);
+  app.use('/api/auth', createAuthRouter(prisma));
+  app.use('/api/targets', createTargetsRouter(prisma));
+
+  // Unmatched routes and the final error handler.
+  app.use(notFound);
+  app.use(errorHandler);
 
   return app;
 }

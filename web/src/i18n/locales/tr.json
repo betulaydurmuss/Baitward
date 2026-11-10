@@ -1,0 +1,27 @@
+{
+  "appName": "Baitward",
+  "tagline": "Yetkili oltalama simülasyonu ve güvenlik farkındalık eğitimi.",
+  "nav": {
+    "overview": "Genel bakış",
+    "brand": "Marka"
+  },
+  "language": "Dil",
+  "home": {
+    "title": "Çalışanlarınızı oltalamaya karşı güvenle eğitin.",
+    "lede": "Baitward, bir kurumun kendi çalışanlarını kontrollü ve yetkili simülasyonlarla test edip eğitmesini sağlar — kimin açtığını, tıkladığını ve veri girdiğini ölçer ve hata yapıldığı anda eğitir.",
+    "guaranteeTitle": "Tasarımı gereği savunma odaklı",
+    "guarantee": "Girilen veri asla saklanmaz. Sahte formun gönderimi yakalanır, içeriği atılır ve yalnızca \"veri girildi\" olayı kaydedilir.",
+    "status": "Erken geliştirme — panel sonraki bir aşamada gelecek."
+  },
+  "brand": {
+    "title": "Marka",
+    "intro": "Baitward kimliği: tek bir indigo vurgu, açık ve sakin bir yüzey, metin için Inter ve sayılar için JetBrains Mono.",
+    "logo": "Logo",
+    "logoFull": "Tam logo",
+    "logoIcon": "Yalnızca ikon",
+    "palette": "Renk paleti",
+    "typography": "Tipografi",
+    "sansLabel": "Inter — arayüz metni",
+    "monoLabel": "JetBrains Mono — sayılar, token'lar, süreler"
+  }
+}

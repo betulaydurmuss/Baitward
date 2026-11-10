@@ -1,0 +1,27 @@
+{
+  "appName": "Baitward",
+  "tagline": "Authorized phishing simulation and security awareness training.",
+  "nav": {
+    "overview": "Overview",
+    "brand": "Brand"
+  },
+  "language": "Language",
+  "home": {
+    "title": "Train your people against phishing, safely.",
+    "lede": "Baitward lets a company test and train its own employees with controlled, authorized simulations — measuring who opens, clicks and submits, and teaching the moment someone slips.",
+    "guaranteeTitle": "Defensive by design",
+    "guarantee": "Submitted data is never stored. The fake form POST is captured, its body discarded, and only a \"submitted\" event is recorded.",
+    "status": "Early development — the dashboard arrives in a later phase."
+  },
+  "brand": {
+    "title": "Brand",
+    "intro": "The Baitward identity: one indigo accent, a light and quiet surface, Inter for text and JetBrains Mono for numbers.",
+    "logo": "Logo",
+    "logoFull": "Full logo",
+    "logoIcon": "Icon only",
+    "palette": "Palette",
+    "typography": "Typography",
+    "sansLabel": "Inter — interface text",
+    "monoLabel": "JetBrains Mono — numbers, tokens, durations"
+  }
+}

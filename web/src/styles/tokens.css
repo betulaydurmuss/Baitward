@@ -1,0 +1,59 @@
+/*
+ * Design tokens — the single source of truth for colour, type and spacing.
+ * Light theme is primary. Dark theme is optional and comes "for free" because
+ * every colour is a token: the dark block below only reassigns the same names.
+ *
+ * Status colours are deliberately distinct hues (not just shades) and are always
+ * paired with an icon and text in the UI, so meaning never rests on colour alone.
+ */
+:root {
+  /* Brand */
+  --accent: #4f46e5; /* indigo — the single accent, used sparingly */
+  --accent-hover: #4338ca;
+  --accent-contrast: #ffffff;
+  --accent-soft: #eef2ff; /* tinted surface for accent emphasis */
+
+  /* Surfaces (light) */
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --raised: #ffffff;
+  --line: #e2e8f0;
+
+  /* Text */
+  --text: #0f172a;
+  --muted: #64748b;
+
+  /* Status (campaign journey) */
+  --sent: #64748b; /* grey  — Sent */
+  --opened: #eab308; /* yellow — Opened */
+  --clicked: #ea580c; /* orange — Clicked */
+  --good: #16a34a; /* green  — Reported / Trained */
+  --bad: #dc2626; /* red    — Submitted */
+
+  /* Type */
+  --font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Shape & spacing */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+/* Optional dark theme. Enabled by data-theme="dark" on <html>; the token names
+ * stay identical, so no component needs to know which theme is active. */
+:root[data-theme='dark'] {
+  --bg: #0b1120;
+  --surface: #111827;
+  --raised: #1f2937;
+  --line: #334155;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --accent-soft: #1e1b4b;
+}

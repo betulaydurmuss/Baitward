@@ -3,6 +3,9 @@
 // another's, because every query is filtered by orgId.
 import { Prisma, type PrismaClient, type Locale } from '@prisma/client';
 import { AppError } from '../lib/http-error.js';
+import { validateTargetsCsv } from './csv.js';
+
+const MAX_IMPORT_ROWS = 1000;
 
 export type TargetInput = {
   email: string;
@@ -48,6 +51,37 @@ export function createTargetService(prisma: PrismaClient) {
     async remove(orgId: string, id: string) {
       await this.get(orgId, id);
       await prisma.target.delete({ where: { id } });
+    },
+
+    // Step 1 of import: parse and validate, writing nothing. The caller shows the
+    // user which rows are valid and why the rest are not.
+    importPreview(csv: string) {
+      return validateTargetsCsv(csv);
+    },
+
+    // Step 2: re-validate on the server (never trusting the client) and create the
+    // valid rows in a single transaction. Rows whose email already exists are skipped.
+    async importCommit(orgId: string, csv: string) {
+      const { rows, validCount } = validateTargetsCsv(csv);
+      if (validCount === 0) throw new AppError(400, 'no_valid_rows', 'No valid rows to import');
+      if (validCount > MAX_IMPORT_ROWS) {
+        throw new AppError(
+          400,
+          'too_many_rows',
+          `At most ${MAX_IMPORT_ROWS} rows can be imported at once`,
+        );
+      }
+
+      const data = rows
+        .filter((r): r is Extract<typeof r, { valid: true }> => r.valid)
+        .map((r) => ({ orgId, ...r.data }));
+
+      const result = await prisma.target.createMany({ data, skipDuplicates: true });
+      return {
+        created: result.count,
+        skipped: validCount - result.count,
+        invalid: rows.length - validCount,
+      };
     },
   };
 }

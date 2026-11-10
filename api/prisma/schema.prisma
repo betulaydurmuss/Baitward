@@ -66,10 +66,12 @@ model Organization {
   dataRetentionDays Int      @default(180) @map("data_retention_days")
   createdAt         DateTime @default(now()) @map("created_at")
 
-  users     User[]
-  targets   Target[]
-  templates EmailTemplate[]
-  campaigns Campaign[]
+  users           User[]
+  targets         Target[]
+  templates       EmailTemplate[]
+  campaigns       Campaign[]
+  landingPages    LandingPage[]
+  trainingModules TrainingModule[]
 
   @@map("organizations")
 }
@@ -188,9 +190,10 @@ model Campaign {
   status      CampaignStatus @default(draft)
   createdAt   DateTime       @default(now()) @map("created_at")
 
-  org      Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  template EmailTemplate    @relation(fields: [templateId], references: [id])
-  targets  CampaignTarget[]
+  org         Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  template    EmailTemplate    @relation(fields: [templateId], references: [id])
+  landingPage LandingPage?     @relation(fields: [landingPageId], references: [id])
+  targets     CampaignTarget[]
 
   @@index([orgId])
   @@map("campaigns")
@@ -205,9 +208,10 @@ model CampaignTarget {
   token      String    @unique
   sentAt     DateTime? @map("sent_at")
 
-  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  target   Target   @relation(fields: [targetId], references: [id], onDelete: Cascade)
-  events   Event[]
+  campaign    Campaign             @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  target      Target               @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  events      Event[]
+  completions TrainingCompletion[]
 
   @@index([campaignId])
   @@map("campaign_targets")
@@ -227,4 +231,61 @@ model Event {
 
   @@index([campaignTargetId])
   @@map("events")
+}
+
+// A generic fake landing page (never an impersonation of a real brand) shown when a
+// recipient clicks. If capturesSubmit is on, its form posts to the submit endpoint,
+// which records the event and discards the content.
+model LandingPage {
+  id             String   @id @default(cuid())
+  orgId          String   @map("org_id")
+  name           String
+  locale         Locale   @default(tr)
+  html           String
+  capturesSubmit Boolean  @default(true) @map("captures_submit")
+  trainingId     String?  @map("training_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  org       Organization    @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  training  TrainingModule? @relation(fields: [trainingId], references: [id], onDelete: SetNull)
+  campaigns Campaign[]
+
+  @@index([orgId])
+  @@map("landing_pages")
+}
+
+// The short training shown after a click/submit: some copy plus a small quiz. The
+// quiz is JSON: [{ question, options: string[], answer: number }].
+model TrainingModule {
+  id        String   @id @default(cuid())
+  orgId     String   @map("org_id")
+  locale    Locale   @default(tr)
+  title     String
+  content   String
+  quiz      Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  org          Organization         @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  landingPages LandingPage[]
+  completions  TrainingCompletion[]
+
+  @@index([orgId])
+  @@map("training_modules")
+}
+
+// Records that a recipient finished the training, with their quiz score. Tied to the
+// campaign recipient so completion can be seen in the context of a campaign.
+model TrainingCompletion {
+  id               String   @id @default(cuid())
+  campaignTargetId String   @map("campaign_target_id")
+  moduleId         String   @map("module_id")
+  locale           Locale
+  score            Int
+  completedAt      DateTime @default(now()) @map("completed_at")
+
+  campaignTarget CampaignTarget @relation(fields: [campaignTargetId], references: [id], onDelete: Cascade)
+  module         TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([campaignTargetId])
+  @@map("training_completions")
 }

@@ -13,6 +13,9 @@ import { CampaignDetailPage } from './pages/CampaignDetailPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { StyleguidePage } from './pages/StyleguidePage';
 import { CaughtPage } from './pages/CaughtPage';
+import { LandingPagesPage } from './pages/LandingPagesPage';
+import { TrainingEditorPage } from './pages/TrainingEditorPage';
+import { TrainingScreen } from './pages/TrainingScreen';
 import { SignInPage } from './pages/auth/SignInPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
@@ -43,6 +46,8 @@ export function App() {
               <Link to="/campaigns">{t('nav.campaigns')}</Link>
               <Link to="/targets">{t('nav.targets')}</Link>
               <Link to="/templates">{t('nav.templates')}</Link>
+              <Link to="/landing">{t('nav.landing')}</Link>
+              <Link to="/training-modules">{t('nav.training')}</Link>
               <Link to="/sessions">{t('nav.sessions')}</Link>
               <button className="lang-switch" onClick={onSignOut}>
                 {t('nav.signOut')}
@@ -60,6 +65,7 @@ export function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/caught" element={<CaughtPage />} />
           <Route path="/styleguide" element={<StyleguidePage />} />
+          <Route path="/training/:token" element={<TrainingScreen />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -102,6 +108,22 @@ export function App() {
             element={
               <ProtectedRoute>
                 <TemplatesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/landing"
+            element={
+              <ProtectedRoute>
+                <LandingPagesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-modules"
+            element={
+              <ProtectedRoute>
+                <TrainingEditorPage />
               </ProtectedRoute>
             }
           />

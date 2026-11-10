@@ -7,6 +7,8 @@
     "campaigns": "Campaigns",
     "targets": "Targets",
     "templates": "Templates",
+    "landing": "Landing",
+    "training": "Training",
     "sessions": "Sessions",
     "signIn": "Sign in",
     "signOut": "Sign out"
@@ -50,6 +52,8 @@
     "scheduledAt": "Schedule (optional)",
     "create": "Create campaign",
     "choose": "Choose a template",
+    "landing": "Landing page",
+    "noLanding": "None (go straight to training)",
     "recipients": "Recipients",
     "status": "Status",
     "launch": "Launch",
@@ -61,6 +65,48 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     }
+  },
+  "landing": {
+    "title": "Landing pages",
+    "name": "Name",
+    "html": "Page HTML",
+    "formHint": "Use {{submit_url}} as the form action and {{first_name}}, {{email}} for personalisation.",
+    "preview": "Preview",
+    "training": "Training after submit",
+    "defaultTraining": "Default awareness training",
+    "capturesSubmit": "Capture form submit",
+    "add": "Add landing page",
+    "empty": "No landing pages yet. Clicks fall back to the default training."
+  },
+  "trainingEditor": {
+    "title": "Training modules",
+    "name": "Title",
+    "content": "Lesson text",
+    "quiz": "Quiz",
+    "question": "Question",
+    "option": "Option",
+    "addOption": "Add option",
+    "addQuestion": "Add question",
+    "add": "Add module",
+    "empty": "No modules yet. Clicks use the built-in default training."
+  },
+  "training": {
+    "score": "You scored {{correct}} of {{total}}",
+    "passed": "Well done — you spotted the warning signs.",
+    "review": "Review the tips above and stay alert next time.",
+    "finish": "Finish"
+  },
+  "import": {
+    "title": "Import from CSV",
+    "sample": "Download sample",
+    "preview": "Preview",
+    "commit": "Import {{n}} valid rows",
+    "done": "Imported {{created}}, skipped {{skipped}} duplicates, {{invalid}} invalid.",
+    "line": "Line",
+    "status": "Status",
+    "detail": "Detail",
+    "valid": "Valid",
+    "invalid": "Invalid"
   },
   "status": {
     "sent": "Sent",

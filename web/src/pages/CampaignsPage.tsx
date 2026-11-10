@@ -14,6 +14,7 @@ type CampaignRow = {
 };
 type Template = { id: string; name: string; locale: 'tr' | 'en' };
 type Target = { id: string; groups: string[] };
+type LandingPage = { id: string; name: string; locale: 'tr' | 'en' };
 
 const STATUS_COLOR: Record<CampaignRow['status'], string> = {
   draft: 'var(--muted)',
@@ -28,6 +29,7 @@ export function CampaignsPage() {
   const qc = useQueryClient();
 
   const [templateId, setTemplateId] = useState('');
+  const [landingPageId, setLandingPageId] = useState('');
   const [audience, setAudience] = useState('all');
   const [dripPerMin, setDripPerMin] = useState(20);
   const [scheduledAt, setScheduledAt] = useState('');
@@ -44,6 +46,10 @@ export function CampaignsPage() {
   const targets = useQuery({
     queryKey: ['targets'],
     queryFn: () => api.get<{ targets: Target[] }>('/targets'),
+  });
+  const landingPages = useQuery({
+    queryKey: ['landing-pages'],
+    queryFn: () => api.get<{ landingPages: LandingPage[] }>('/landing-pages'),
   });
 
   const groups = useMemo(() => {
@@ -75,6 +81,7 @@ export function CampaignsPage() {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     const body: Record<string, unknown> = { templateId, dripPerMin };
+    if (landingPageId) body.landingPageId = landingPageId;
     if (scheduledAt) body.scheduledAt = new Date(scheduledAt).toISOString();
     if (audience === 'all') {
       body.targetIds = targets.data?.targets.map((tg) => tg.id) ?? [];
@@ -107,6 +114,21 @@ export function CampaignsPage() {
               {templates.data?.templates.map((tpl) => (
                 <option key={tpl.id} value={tpl.id}>
                   {tpl.name} ({tpl.locale.toUpperCase()})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="field" style={{ margin: 0 }}>
+            <label htmlFor="c-landing">{t('campaigns.landing')}</label>
+            <select
+              id="c-landing"
+              value={landingPageId}
+              onChange={(e) => setLandingPageId(e.target.value)}
+            >
+              <option value="">{t('campaigns.noLanding')}</option>
+              {landingPages.data?.landingPages.map((lp) => (
+                <option key={lp.id} value={lp.id}>
+                  {lp.name} ({lp.locale.toUpperCase()})
                 </option>
               ))}
             </select>

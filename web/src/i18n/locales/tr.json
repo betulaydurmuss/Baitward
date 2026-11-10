@@ -7,6 +7,8 @@
     "campaigns": "Kampanyalar",
     "targets": "Hedefler",
     "templates": "Şablonlar",
+    "landing": "İniş sayfası",
+    "training": "Eğitim",
     "sessions": "Oturumlar",
     "signIn": "Giriş yap",
     "signOut": "Çıkış yap"
@@ -50,6 +52,8 @@
     "scheduledAt": "Zamanlama (isteğe bağlı)",
     "create": "Kampanya oluştur",
     "choose": "Bir şablon seçin",
+    "landing": "İniş sayfası",
+    "noLanding": "Yok (doğrudan eğitime git)",
     "recipients": "Alıcılar",
     "status": "Durum",
     "launch": "Başlat",
@@ -61,6 +65,48 @@
       "completed": "Tamamlandı",
       "cancelled": "İptal edildi"
     }
+  },
+  "landing": {
+    "title": "İniş sayfaları",
+    "name": "Ad",
+    "html": "Sayfa HTML'i",
+    "formHint": "Form action için {{submit_url}}, kişiselleştirme için {{first_name}}, {{email}} kullanın.",
+    "preview": "Önizleme",
+    "training": "Gönderim sonrası eğitim",
+    "defaultTraining": "Varsayılan farkındalık eğitimi",
+    "capturesSubmit": "Form gönderimini yakala",
+    "add": "İniş sayfası ekle",
+    "empty": "Henüz iniş sayfası yok. Tıklamalar varsayılan eğitime düşer."
+  },
+  "trainingEditor": {
+    "title": "Eğitim modülleri",
+    "name": "Başlık",
+    "content": "Ders metni",
+    "quiz": "Quiz",
+    "question": "Soru",
+    "option": "Seçenek",
+    "addOption": "Seçenek ekle",
+    "addQuestion": "Soru ekle",
+    "add": "Modül ekle",
+    "empty": "Henüz modül yok. Tıklamalar yerleşik varsayılan eğitimi kullanır."
+  },
+  "training": {
+    "score": "{{total}} sorudan {{correct}} doğru",
+    "passed": "Aferin — uyarı işaretlerini fark ettiniz.",
+    "review": "Yukarıdaki ipuçlarını gözden geçirin ve bir dahaki sefere dikkatli olun.",
+    "finish": "Bitir"
+  },
+  "import": {
+    "title": "CSV'den içe aktar",
+    "sample": "Örnek indir",
+    "preview": "Önizle",
+    "commit": "{{n}} geçerli satırı aktar",
+    "done": "{{created}} eklendi, {{skipped}} yinelenen atlandı, {{invalid}} geçersiz.",
+    "line": "Satır",
+    "status": "Durum",
+    "detail": "Ayrıntı",
+    "valid": "Geçerli",
+    "invalid": "Geçersiz"
   },
   "status": {
     "sent": "Gönderildi",

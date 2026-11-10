@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { api, ApiError } from '../lib/api';
+import { ImportPanel } from '../components/ImportPanel';
 
 type Target = {
   id: string;
@@ -102,6 +103,8 @@ export function TargetsPage() {
           {t('targets.add')}
         </button>
       </form>
+
+      <ImportPanel />
 
       {targets.isLoading && <p className="muted">{t('common.loading')}</p>}
       {targets.data?.targets.length === 0 && <p className="muted">{t('targets.empty')}</p>}

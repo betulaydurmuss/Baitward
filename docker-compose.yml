@@ -1,0 +1,41 @@
+# Local development services. One command — `docker compose up -d` — brings up
+# everything the app needs: the database, the queue, and a mail catcher.
+services:
+  # PostgreSQL holds all application data (organisations, campaigns, events).
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: baitward
+      POSTGRES_PASSWORD: baitward
+      POSTGRES_DB: baitward
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U baitward']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis backs the BullMQ queues used for drip sending and scheduled campaigns.
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Mailpit catches outgoing mail in development so nothing is ever sent for real.
+  # SMTP on 1025, web UI on 8025.
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+volumes:
+  postgres_data:

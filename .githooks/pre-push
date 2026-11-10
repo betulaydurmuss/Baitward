@@ -1,0 +1,12 @@
+#!/bin/sh
+# Block a push if any commit about to go out mentions Claude or Anthropic,
+# in either the author identity or the message body.
+range="origin/main..HEAD"
+if ! git rev-parse origin/main >/dev/null 2>&1; then
+  range="HEAD"
+fi
+if git log --format='%an %ae%n%B' "$range" 2>/dev/null | grep -iqE 'claude|anthropic'; then
+  echo "pre-push hook: a commit references Claude or Anthropic. Fix the history before pushing."
+  exit 1
+fi
+exit 0

@@ -40,16 +40,16 @@ The most important design decision: **the content a target types into a fake for
 never stored.** The submit endpoint discards the request body and records only that a
 `submitted` event happened, plus technical metadata.
 
-| Table | What it holds |
-| ----- | ------------- |
-| `organizations` | name, plan, verified domain, monthly send limit, retention window |
-| `users` | email, Argon2id password hash, role, encrypted TOTP secret, lock/suspend state |
-| `sessions` | refresh-token **hash** only, ip, user agent, revoked/expiry |
-| `targets` | employee email, name, department, locale, groups |
-| `email_templates` / `landing_pages` / `training_modules` | reusable, localised content |
-| `campaigns` / `campaign_targets` | schedule, drip rate, and a unique tracking token per recipient |
-| `events` | `sent` / `opened` / `clicked` / `submitted` / `reported` / `trained` + ip + user agent |
-| `audit_logs` / `domain_verifications` / `reports` | governance and output |
+| Table                                                    | What it holds                                                                          |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `organizations`                                          | name, plan, verified domain, monthly send limit, retention window                      |
+| `users`                                                  | email, Argon2id password hash, role, encrypted TOTP secret, lock/suspend state         |
+| `sessions`                                               | refresh-token **hash** only, ip, user agent, revoked/expiry                            |
+| `targets`                                                | employee email, name, department, locale, groups                                       |
+| `email_templates` / `landing_pages` / `training_modules` | reusable, localised content                                                            |
+| `campaigns` / `campaign_targets`                         | schedule, drip rate, and a unique tracking token per recipient                         |
+| `events`                                                 | `sent` / `opened` / `clicked` / `submitted` / `reported` / `trained` + ip + user agent |
+| `audit_logs` / `domain_verifications` / `reports`        | governance and output                                                                  |
 
 There is **no column anywhere for submitted credentials or form contents.** A tracking
 URL carries only an opaque token — never a name or email.
@@ -72,10 +72,10 @@ CSS and design tokens (no ready-made admin theme). Every screen has loading, emp
 error and filled states, and status is never shown by colour alone — an icon and a
 bilingual label always travel with it.
 
-| | |
-| --- | --- |
+|                                                                            |                                                                |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | ![Campaign funnel and department breakdown](docs/screenshots/campaign.png) | ![Instant training with a quiz](docs/screenshots/training.png) |
-| ![Admin: users, health and audit log](docs/screenshots/admin.png) | ![Human-risk heat map](docs/screenshots/risk.png) |
+| ![Admin: users, health and audit log](docs/screenshots/admin.png)          | ![Human-risk heat map](docs/screenshots/risk.png)              |
 
 ## Repository layout
 
@@ -102,13 +102,13 @@ docs/screenshots/  images used in this README
 
 ## Requirements
 
-| Tool | Version |
-| ---- | ------- |
-| Node.js | ≥ 22 |
-| Docker + Compose | current |
-| PostgreSQL | 16 (via Docker) |
-| Redis | 7 (via Docker) |
-| Chrome or Edge | any recent (for PDF reports) |
+| Tool             | Version                      |
+| ---------------- | ---------------------------- |
+| Node.js          | ≥ 22                         |
+| Docker + Compose | current                      |
+| PostgreSQL       | 16 (via Docker)              |
+| Redis            | 7 (via Docker)               |
+| Chrome or Edge   | any recent (for PDF reports) |
 
 ## Running it locally
 
@@ -156,10 +156,10 @@ curl -s https://<your-deployment-url>/api/health
 
 ## Roadmap
 
-| Stage | Work |
-| ----- | ---- |
-| Core | Auth, campaigns, tracking, training, reporting, admin — **done** |
-| Next | SMS / voice / QR channels, gamification, scheduled recurring campaigns |
+| Stage | Work                                                                    |
+| ----- | ----------------------------------------------------------------------- |
+| Core  | Auth, campaigns, tracking, training, reporting, admin — **done**        |
+| Next  | SMS / voice / QR channels, gamification, scheduled recurring campaigns  |
 | Later | SSO (SAML/OIDC), SCIM provisioning, SIEM integration, benchmark reports |
 
 ## License

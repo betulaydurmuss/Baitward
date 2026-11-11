@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export function HomePage() {
@@ -12,6 +13,19 @@ export function HomePage() {
         <p className="muted" style={{ margin: 0, maxWidth: 640, fontSize: 17 }}>
           {t('home.lede')}
         </p>
+      </div>
+
+      <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+        <Link
+          to="/signin"
+          className="btn btn-primary"
+          style={{ width: 'auto', textDecoration: 'none' }}
+        >
+          {t('nav.signIn')}
+        </Link>
+        <Link to="/signup" className="btn" style={{ textDecoration: 'none' }}>
+          {t('auth.signIn.signUpLink')}
+        </Link>
       </div>
 
       <div className="card" style={{ borderLeft: '3px solid var(--accent)' }}>

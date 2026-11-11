@@ -62,6 +62,8 @@ model Organization {
   name              String
   plan              String   @default("trial")
   verifiedDomain    String?  @map("verified_domain")
+  // Per-organisation sending cap, enforced at launch (a simple abuse guard).
+  monthlySendLimit  Int      @default(5000) @map("monthly_send_limit")
   // When a retention window passes, behavioural data is deleted (KVKK).
   dataRetentionDays Int      @default(180) @map("data_retention_days")
   createdAt         DateTime @default(now()) @map("created_at")
@@ -73,6 +75,8 @@ model Organization {
   landingPages    LandingPage[]
   trainingModules TrainingModule[]
   reports         Report[]
+  auditLogs       AuditLog[]
+  domains         DomainVerification[]
 
   @@map("organizations")
 }
@@ -92,6 +96,8 @@ model User {
   // Password-reset token is stored only as a hash, with a short expiry.
   resetTokenHash      String?   @map("reset_token_hash")
   resetTokenExpiresAt DateTime? @map("reset_token_expires_at")
+  // When set, the account is suspended and cannot sign in.
+  suspendedAt         DateTime? @map("suspended_at")
   createdAt           DateTime  @default(now()) @map("created_at")
 
   org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
@@ -309,4 +315,39 @@ model Report {
 
   @@index([orgId])
   @@map("reports")
+}
+
+// An immutable record of a notable action (admin operations, campaign launches).
+// Append-only: rows are written, never updated or deleted in normal operation.
+model AuditLog {
+  id        String   @id @default(cuid())
+  orgId     String   @map("org_id")
+  actorId   String?  @map("actor_id")
+  action    String
+  target    String?
+  ip        String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@map("audit_logs")
+}
+
+// Proof that an organisation controls a domain. A campaign can only launch once the
+// organisation has a verified domain, which blocks sending to addresses it does not own.
+model DomainVerification {
+  id         String    @id @default(cuid())
+  orgId      String    @map("org_id")
+  domain     String
+  method     String    @default("dns")
+  token      String
+  verifiedAt DateTime? @map("verified_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, domain])
+  @@index([orgId])
+  @@map("domain_verifications")
 }

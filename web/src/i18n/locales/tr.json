@@ -204,11 +204,40 @@
     ]
   },
   "home": {
+    "eyebrow": "Yetkili · gizlilik öncelikli",
     "title": "Çalışanlarınızı oltalamaya karşı güvenle eğitin.",
     "lede": "Baitward, bir kurumun kendi çalışanlarını kontrollü ve yetkili simülasyonlarla test edip eğitmesini sağlar — kimin açtığını, tıkladığını ve veri girdiğini ölçer ve hata yapıldığı anda eğitir.",
+    "cta": "Ücretsiz başla",
+    "haveAccount": "Zaten hesabınız var mı?",
+    "featuresHeading": "Güvenli bir simülasyon için ihtiyacınız olan her şey",
+    "features": {
+      "campaigns": {
+        "title": "Kampanya motoru",
+        "desc": "İki dilli şablonlar oluşturun, doğru kişilere güvenli bir hızda kademeli simülasyon gönderin."
+      },
+      "tracking": {
+        "title": "Gerçek zamanlı takip",
+        "desc": "Açılma, tıklama ve veri girişini departman kırılımıyla canlı bir hunide izleyin."
+      },
+      "training": {
+        "title": "Anlık eğitim",
+        "desc": "Biri tıkladığı an kısa bir ders ve quiz alır — cezalandırmak değil, eğitmek için."
+      },
+      "reports": {
+        "title": "Denetime hazır rapor",
+        "desc": "İki dilli PDF rapor alın, çalışan ve ekip bazında insan riski skorunu izleyin."
+      },
+      "privacy": {
+        "title": "Tasarımı gereği gizlilik",
+        "desc": "Girilen veri asla saklanmaz — yalnızca bir formun gönderildiği bilgisi ve teknik üstveri."
+      },
+      "bilingual": {
+        "title": "Türkçe ve İngilizce",
+        "desc": "Her ekran, e-posta şablonu ve eğitim dersi iki dilde mevcuttur."
+      }
+    },
     "guaranteeTitle": "Tasarımı gereği savunma odaklı",
-    "guarantee": "Girilen veri asla saklanmaz. Sahte formun gönderimi yakalanır, içeriği atılır ve yalnızca \"veri girildi\" olayı kaydedilir.",
-    "status": "Erken geliştirme — panel sonraki bir aşamada gelecek."
+    "guarantee": "Girilen veri asla saklanmaz. Sahte formun gönderimi yakalanır, içeriği atılır ve yalnızca \"veri girildi\" olayı kaydedilir."
   },
   "auth": {
     "errors": {

@@ -32,7 +32,7 @@ export function SignUpPage() {
   }
 
   return (
-    <div className="auth-wrap">
+    <div className="auth-card">
       <h1>{t('auth.signUp.title')}</h1>
       {error && <p className="form-error">{error}</p>}
       <form onSubmit={onSubmit}>

@@ -204,11 +204,40 @@
     ]
   },
   "home": {
+    "eyebrow": "Authorized · privacy-first",
     "title": "Train your people against phishing, safely.",
     "lede": "Baitward lets a company test and train its own employees with controlled, authorized simulations — measuring who opens, clicks and submits, and teaching the moment someone slips.",
+    "cta": "Get started",
+    "haveAccount": "Already have an account?",
+    "featuresHeading": "Everything you need to run a safe simulation",
+    "features": {
+      "campaigns": {
+        "title": "Campaign engine",
+        "desc": "Build bilingual templates and drip simulated emails to the right people at a safe rate."
+      },
+      "tracking": {
+        "title": "Real-time tracking",
+        "desc": "Watch opens, clicks and submits land in a live funnel, broken down by department."
+      },
+      "training": {
+        "title": "Instant training",
+        "desc": "The moment someone clicks, they get a short lesson and a quiz — teaching, not shaming."
+      },
+      "reports": {
+        "title": "Audit-ready reports",
+        "desc": "Export bilingual PDF reports and track a human-risk score per employee and team."
+      },
+      "privacy": {
+        "title": "Privacy by design",
+        "desc": "Submitted data is never stored — only that a form was submitted, plus technical metadata."
+      },
+      "bilingual": {
+        "title": "Turkish & English",
+        "desc": "Every screen, email template and training lesson is available in both languages."
+      }
+    },
     "guaranteeTitle": "Defensive by design",
-    "guarantee": "Submitted data is never stored. The fake form POST is captured, its body discarded, and only a \"submitted\" event is recorded.",
-    "status": "Early development — the dashboard arrives in a later phase."
+    "guarantee": "Submitted data is never stored. The fake form POST is captured, its body discarded, and only a \"submitted\" event is recorded."
   },
   "auth": {
     "errors": {

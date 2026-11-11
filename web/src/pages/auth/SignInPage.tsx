@@ -63,7 +63,7 @@ export function SignInPage() {
 
   if (pendingToken) {
     return (
-      <div className="auth-wrap">
+      <div className="auth-card">
         <h1>{t('auth.signIn.twoFactorTitle')}</h1>
         {error && <p className="form-error">{error}</p>}
         <form onSubmit={onCodeSubmit}>
@@ -88,7 +88,7 @@ export function SignInPage() {
   }
 
   return (
-    <div className="auth-wrap">
+    <div className="auth-card">
       <h1>{t('auth.signIn.title')}</h1>
       {error && <p className="form-error">{error}</p>}
       <form onSubmit={onPasswordSubmit}>

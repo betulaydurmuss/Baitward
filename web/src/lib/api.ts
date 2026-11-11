@@ -70,8 +70,22 @@ export async function tryRefresh(): Promise<boolean> {
   }
 }
 
+// Fetches a binary file (e.g. a report PDF) with auth, retrying once after a
+// silent refresh. Returns a Blob the caller can turn into a download.
+async function getBlob(path: string): Promise<Blob> {
+  const authHeaders = (): Record<string, string> =>
+    accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+  let res = await fetch(BASE + path, { headers: authHeaders(), credentials: 'include' });
+  if (res.status === 401 && (await tryRefresh())) {
+    res = await fetch(BASE + path, { headers: authHeaders(), credentials: 'include' });
+  }
+  if (!res.ok) throw new ApiError('download_failed', 'Download failed', res.status);
+  return res.blob();
+}
+
 export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body?: unknown) => request<T>(path, { method: 'POST', body }),
   del: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+  blob: getBlob,
 };

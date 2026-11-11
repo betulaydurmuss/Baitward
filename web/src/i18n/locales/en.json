@@ -9,9 +9,28 @@
     "templates": "Templates",
     "landing": "Landing",
     "training": "Training",
+    "reports": "Reports",
+    "risk": "Risk",
     "sessions": "Sessions",
     "signIn": "Sign in",
     "signOut": "Sign out"
+  },
+  "reports": {
+    "title": "Reports",
+    "generate": "Generate PDF",
+    "generating": "Generating…",
+    "empty": "No reports yet. Generate an audit-ready PDF for a campaign.",
+    "generated": "Generated"
+  },
+  "risk": {
+    "title": "Human risk",
+    "note": "Weighted from behaviour: submitting data raises the score, reporting a phish lowers it.",
+    "heatmap": "By department",
+    "byEmployee": "By employee",
+    "score": "Score",
+    "band": "Band",
+    "people": "people",
+    "bands": { "low": "Low", "medium": "Medium", "high": "High" }
   },
   "language": "Language",
   "common": {

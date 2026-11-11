@@ -9,9 +9,28 @@
     "templates": "Şablonlar",
     "landing": "İniş sayfası",
     "training": "Eğitim",
+    "reports": "Raporlar",
+    "risk": "Risk",
     "sessions": "Oturumlar",
     "signIn": "Giriş yap",
     "signOut": "Çıkış yap"
+  },
+  "reports": {
+    "title": "Raporlar",
+    "generate": "PDF oluştur",
+    "generating": "Oluşturuluyor…",
+    "empty": "Henüz rapor yok. Bir kampanya için denetime hazır PDF oluşturun.",
+    "generated": "Oluşturulma"
+  },
+  "risk": {
+    "title": "İnsan riski",
+    "note": "Davranışa göre ağırlıklandırılır: veri girmek skoru yükseltir, oltayı bildirmek düşürür.",
+    "heatmap": "Departmana göre",
+    "byEmployee": "Çalışana göre",
+    "score": "Skor",
+    "band": "Seviye",
+    "people": "kişi",
+    "bands": { "low": "Düşük", "medium": "Orta", "high": "Yüksek" }
   },
   "language": "Dil",
   "common": {

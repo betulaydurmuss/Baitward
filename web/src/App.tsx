@@ -15,6 +15,8 @@ import { TrainingEditorPage } from './pages/TrainingEditorPage';
 import { TrainingScreen } from './pages/TrainingScreen';
 import { ReportsPage } from './pages/ReportsPage';
 import { RiskPage } from './pages/RiskPage';
+import { AdminPage } from './pages/AdminPage';
+import { DomainsPage } from './pages/DomainsPage';
 import { SignInPage } from './pages/auth/SignInPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
@@ -48,6 +50,8 @@ export function App() {
         <Route path="/training-modules" element={<TrainingEditorPage />} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/risk" element={<RiskPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/domains" element={<DomainsPage />} />
         <Route path="/sessions" element={<SessionsPage />} />
       </Route>
     </Routes>

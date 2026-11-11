@@ -13,6 +13,8 @@ import {
   BarChart3,
   ShieldAlert,
   Monitor,
+  ShieldCheck,
+  Globe,
   LogOut,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -20,7 +22,7 @@ import { Logo } from '../brand/Logo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useAuth } from '../auth/AuthContext';
 
-const NAV: { to: string; icon: LucideIcon; key: string }[] = [
+const NAV: { to: string; icon: LucideIcon; key: string; adminOnly?: boolean }[] = [
   { to: '/dashboard', icon: LayoutDashboard, key: 'nav.dashboard' },
   { to: '/campaigns', icon: Send, key: 'nav.campaigns' },
   { to: '/targets', icon: Users, key: 'nav.targets' },
@@ -29,16 +31,21 @@ const NAV: { to: string; icon: LucideIcon; key: string }[] = [
   { to: '/training-modules', icon: GraduationCap, key: 'nav.training' },
   { to: '/reports', icon: BarChart3, key: 'nav.reports' },
   { to: '/risk', icon: ShieldAlert, key: 'nav.risk' },
+  { to: '/admin', icon: ShieldCheck, key: 'nav.admin', adminOnly: true },
+  { to: '/domains', icon: Globe, key: 'nav.domains', adminOnly: true },
   { to: '/sessions', icon: Monitor, key: 'nav.sessions' },
 ];
 
 export function AppShell() {
   const { t } = useTranslation();
-  const { status, signOut } = useAuth();
+  const { status, user, signOut } = useAuth();
   const navigate = useNavigate();
 
   if (status === 'loading') return null;
   if (status === 'anonymous') return <Navigate to="/signin" replace />;
+
+  const isAdmin = user?.role === 'org_admin' || user?.role === 'super_admin';
+  const items = NAV.filter((i) => !i.adminOnly || isAdmin);
 
   return (
     <div className="app-shell">
@@ -47,7 +54,7 @@ export function AppShell() {
           <Logo variant="full" size={26} />
         </Link>
         <nav className="nav-section">
-          {NAV.map(({ to, icon: Icon, key }) => (
+          {items.map(({ to, icon: Icon, key }) => (
             <NavLink
               key={to}
               to={to}

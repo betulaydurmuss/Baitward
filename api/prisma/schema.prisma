@@ -72,6 +72,7 @@ model Organization {
   campaigns       Campaign[]
   landingPages    LandingPage[]
   trainingModules TrainingModule[]
+  reports         Report[]
 
   @@map("organizations")
 }
@@ -194,6 +195,7 @@ model Campaign {
   template    EmailTemplate    @relation(fields: [templateId], references: [id])
   landingPage LandingPage?     @relation(fields: [landingPageId], references: [id])
   targets     CampaignTarget[]
+  reports     Report[]
 
   @@index([orgId])
   @@map("campaigns")
@@ -288,4 +290,23 @@ model TrainingCompletion {
 
   @@index([campaignTargetId])
   @@map("training_completions")
+}
+
+// A generated, audit-ready report (PDF on disk), for one campaign or a period, in
+// one language. `sentAt` is set when a scheduled report was emailed out.
+model Report {
+  id          String    @id @default(cuid())
+  orgId       String    @map("org_id")
+  campaignId  String?   @map("campaign_id")
+  period      String?
+  locale      Locale
+  filePath    String    @map("file_path")
+  generatedAt DateTime  @default(now()) @map("generated_at")
+  sentAt      DateTime? @map("sent_at")
+
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  campaign Campaign?    @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([orgId])
+  @@map("reports")
 }

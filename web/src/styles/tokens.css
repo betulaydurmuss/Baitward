@@ -1,59 +1,53 @@
 /*
- * Design tokens — the single source of truth for colour, type and spacing.
- * Light theme is primary. Dark theme is optional and comes "for free" because
- * every colour is a token: the dark block below only reassigns the same names.
- *
- * Status colours are deliberately distinct hues (not just shades) and are always
- * paired with an icon and text in the UI, so meaning never rests on colour alone.
+ * Design tokens — a modern dark "glass" system. Surfaces are translucent and sit
+ * over a deep gradient background, blurred with backdrop-filter. One indigo accent;
+ * status colours are distinct hues, always paired with an icon + label in the UI.
  */
 :root {
-  /* Brand */
-  --accent: #4f46e5; /* indigo — the single accent, used sparingly */
-  --accent-hover: #4338ca;
+  /* Brand accent */
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
   --accent-contrast: #ffffff;
-  --accent-soft: #eef2ff; /* tinted surface for accent emphasis */
+  --accent-soft: rgba(99, 102, 241, 0.16);
+  --accent-glow: rgba(99, 102, 241, 0.35);
 
-  /* Surfaces (light) */
-  --bg: #ffffff;
-  --surface: #f8fafc;
-  --raised: #ffffff;
-  --line: #e2e8f0;
+  /* Background gradient (set on body) */
+  --bg: #090d1a;
+  --bg-tint-1: rgba(99, 102, 241, 0.14);
+  --bg-tint-2: rgba(16, 185, 129, 0.08);
+
+  /* Glass surfaces */
+  --surface: rgba(255, 255, 255, 0.045);
+  --raised: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(255, 255, 255, 0.09);
+  --glass-blur: 14px;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
 
   /* Text */
-  --text: #0f172a;
-  --muted: #64748b;
+  --text: #e8eaf4;
+  --muted: #9aa3bd;
 
-  /* Status (campaign journey) */
-  --sent: #64748b; /* grey  — Sent */
-  --opened: #eab308; /* yellow — Opened */
-  --clicked: #ea580c; /* orange — Clicked */
-  --good: #16a34a; /* green  — Reported / Trained */
-  --bad: #dc2626; /* red    — Submitted */
+  /* Status (campaign journey) — tuned for dark */
+  --sent: #94a3b8;
+  --opened: #fbbf24;
+  --clicked: #fb923c;
+  --good: #34d399;
+  --bad: #f87171;
 
   /* Type */
   --font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Shape & spacing */
-  --radius: 10px;
-  --radius-sm: 6px;
+  --radius: 16px;
+  --radius-sm: 10px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-6: 24px;
   --space-8: 32px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-}
-
-/* Optional dark theme. Enabled by data-theme="dark" on <html>; the token names
- * stay identical, so no component needs to know which theme is active. */
-:root[data-theme='dark'] {
-  --bg: #0b1120;
-  --surface: #111827;
-  --raised: #1f2937;
-  --line: #334155;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --accent-soft: #1e1b4b;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }

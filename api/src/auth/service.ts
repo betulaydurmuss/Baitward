@@ -113,6 +113,10 @@ export function createAuthService(prisma: PrismaClient) {
         throw new AppError(423, 'account_locked', 'Account temporarily locked. Try again later.');
       }
 
+      if (user.suspendedAt) {
+        throw new AppError(403, 'suspended', 'This account has been suspended');
+      }
+
       const ok = await verifyPassword(user.passwordHash, input.password);
       if (!ok) {
         const next = registerFailure(user.failedLogins);

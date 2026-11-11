@@ -6,6 +6,7 @@ import { createStatsService } from '../stats/service.js';
 import { requireAuth } from '../middleware/auth.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { AppError } from '../lib/http-error.js';
+import { getClientIp } from '../lib/request.js';
 
 const createSchema = z
   .object({
@@ -64,7 +65,8 @@ export function createCampaignsRouter(prisma: PrismaClient): Router {
   router.post(
     '/:id/launch',
     asyncHandler(async (req, res) => {
-      res.json(await service.launch(req.auth!.orgId, id(req)));
+      const actor = { actorId: req.auth!.userId, ip: getClientIp(req) };
+      res.json(await service.launch(req.auth!.orgId, id(req), actor));
     }),
   );
 

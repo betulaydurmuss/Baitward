@@ -18,6 +18,8 @@ import { createTrainingRouter } from './training/router.js';
 import { createPublicTrainingRouter } from './training/public-router.js';
 import { createReportsRouter } from './reports/router.js';
 import { createRiskRouter } from './risk/router.js';
+import { createAdminRouter } from './admin/router.js';
+import { createDomainsRouter } from './domains/router.js';
 import { errorHandler, notFound } from './middleware/error.js';
 
 export function createApp(prisma: PrismaClient) {
@@ -45,6 +47,8 @@ export function createApp(prisma: PrismaClient) {
   app.use('/api/training', createTrainingRouter(prisma));
   app.use('/api/reports', createReportsRouter(prisma));
   app.use('/api/risk', createRiskRouter(prisma));
+  app.use('/api/admin', createAdminRouter(prisma));
+  app.use('/api/domains', createDomainsRouter(prisma));
   app.use('/api/dashboard', createDashboardRouter(prisma));
 
   // Public training endpoints, identified by the recipient's token (no auth).

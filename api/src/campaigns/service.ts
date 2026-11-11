@@ -8,7 +8,15 @@ import type { CampaignStatus, PrismaClient } from '@prisma/client';
 import { AppError } from '../lib/http-error.js';
 import { generateOpaqueToken } from '../lib/tokens.js';
 import { getSendQueue } from '../lib/queue.js';
+import { writeAudit } from '../lib/audit.js';
 import { computeSendDelays } from './drip.js';
+
+type Actor = { actorId: string; ip?: string };
+
+// Start of the current calendar month, for the monthly send limit.
+function monthStart(now = new Date()): Date {
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+}
 
 export type CampaignInput = {
   templateId: string;
@@ -118,11 +126,20 @@ export function createCampaignService(prisma: PrismaClient) {
       });
     },
 
-    async launch(orgId: string, id: string) {
+    async launch(orgId: string, id: string, actor: Actor) {
       const campaign = await prisma.campaign.findFirst({ where: { id, orgId } });
       if (!campaign) throw new AppError(404, 'not_found', 'Campaign not found');
       if (campaign.status !== 'draft' && campaign.status !== 'scheduled') {
         throw new AppError(409, 'already_launched', 'Campaign has already been launched');
+      }
+
+      // Authorisation to send at all: the organisation must own a verified domain.
+      const org = await prisma.organization.findUniqueOrThrow({
+        where: { id: orgId },
+        select: { verifiedDomain: true, monthlySendLimit: true },
+      });
+      if (!org.verifiedDomain) {
+        throw new AppError(403, 'domain_unverified', 'Verify a domain before launching a campaign');
       }
 
       // Only recipients that have not been sent to yet.
@@ -131,6 +148,14 @@ export function createCampaignService(prisma: PrismaClient) {
         select: { id: true },
       });
       if (pending.length === 0) throw new AppError(400, 'no_targets', 'Campaign has no recipients');
+
+      // Enforce the monthly sending limit across the organisation.
+      const sentThisMonth = await prisma.campaignTarget.count({
+        where: { campaign: { orgId }, sentAt: { gte: monthStart() } },
+      });
+      if (sentThisMonth + pending.length > org.monthlySendLimit) {
+        throw new AppError(403, 'limit_reached', 'Monthly sending limit would be exceeded');
+      }
 
       const startAt =
         campaign.scheduledAt && campaign.scheduledAt > new Date()
@@ -161,6 +186,13 @@ export function createCampaignService(prisma: PrismaClient) {
 
       const status: CampaignStatus = startAt > new Date() ? 'scheduled' : 'sending';
       await prisma.campaign.update({ where: { id }, data: { status } });
+      await writeAudit(prisma, {
+        orgId,
+        actorId: actor.actorId,
+        action: 'campaign.launch',
+        target: id,
+        ip: actor.ip,
+      });
       return { enqueued: pending.length, status };
     },
 

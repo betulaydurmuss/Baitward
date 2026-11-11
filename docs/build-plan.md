@@ -1,17 +1,18 @@
 # Build plan
 
 Baitward is built in phases. Each phase leaves the project compiling and runnable.
+All phases are complete; the core product ships.
 
-| Phase | Theme                                          |
-| ----- | ---------------------------------------------- |
-| 0     | Setup and brand                                |
-| 1     | Secure sign-in and multi-tenant organisations  |
-| 2     | Campaign and email engine                      |
-| 3     | Tracking, dashboard and design system          |
-| 4     | Landing pages, instant training and CSV import |
-| 5     | Reporting, risk scores and compliance PDF      |
-| 6     | Admin panel and authorization                  |
-| 7     | README, screenshots and release                |
+| Phase | Theme                                          | Status |
+| ----- | ---------------------------------------------- | ------ |
+| 0     | Setup and brand                                | done   |
+| 1     | Secure sign-in and multi-tenant organisations  | done   |
+| 2     | Campaign and email engine                      | done   |
+| 3     | Tracking, dashboard and design system          | done   |
+| 4     | Landing pages, instant training and CSV import | done   |
+| 5     | Reporting, risk scores and compliance PDF      | done   |
+| 6     | Admin panel and authorization                  | done   |
+| 7     | README, screenshots and release                | done   |
 
 ## Guarantees carried through every phase
 

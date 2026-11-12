@@ -47,15 +47,10 @@ export function createAuthRouter(prisma: PrismaClient): Router {
     userId: string;
     viaPending: boolean;
   } {
-    const header = req.get('authorization');
-    if (header?.startsWith('Bearer ')) {
-      try {
-        const claims = verifyAccessToken(header.slice('Bearer '.length));
-        return { userId: claims.sub, viaPending: false };
-      } catch {
-        throw new AppError(401, 'unauthorized', 'Invalid or expired token');
-      }
-    }
+    // Prefer an explicit enrolment token: a user who just signed in to enrol is
+    // acting on that pending identity, even if the browser still carries an
+    // ambient session for a different account (which would otherwise hijack the
+    // enrolment and bind the QR to the wrong user).
     const pending = (req.body as { pendingToken?: unknown }).pendingToken;
     if (typeof pending === 'string') {
       try {
@@ -66,6 +61,15 @@ export function createAuthRouter(prisma: PrismaClient): Router {
         return { userId: claims.sub, viaPending: true };
       } catch (err) {
         if (err instanceof AppError) throw err;
+        throw new AppError(401, 'unauthorized', 'Invalid or expired token');
+      }
+    }
+    const header = req.get('authorization');
+    if (header?.startsWith('Bearer ')) {
+      try {
+        const claims = verifyAccessToken(header.slice('Bearer '.length));
+        return { userId: claims.sub, viaPending: false };
+      } catch {
         throw new AppError(401, 'unauthorized', 'Invalid or expired token');
       }
     }

@@ -71,6 +71,9 @@
     "bands": { "low": "Düşük", "medium": "Orta", "high": "Yüksek" }
   },
   "language": "Dil",
+  "theme": "Tema",
+  "themeLight": "Açık",
+  "themeDark": "Koyu",
   "common": {
     "loading": "Yükleniyor…",
     "delete": "Sil"

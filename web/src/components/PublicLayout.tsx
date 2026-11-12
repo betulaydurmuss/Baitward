@@ -5,6 +5,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '../brand/Logo';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 
 export function PublicLayout() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export function PublicLayout() {
           <Link to="/signin" className="nav-link" style={{ padding: '8px 12px' }}>
             {t('nav.signIn')}
           </Link>
+          <ThemeToggle />
           <LanguageSwitcher />
         </nav>
       </header>

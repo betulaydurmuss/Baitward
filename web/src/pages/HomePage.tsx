@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -35,15 +36,15 @@ export function HomePage() {
             {t('home.cta')}
           </Link>
         </div>
-        <p className="muted" style={{ marginTop: 'var(--space-4)', fontSize: 14 }}>
+        <p className="muted hero-sub" style={{ marginTop: 'var(--space-4)', fontSize: 14 }}>
           {t('home.haveAccount')} <Link to="/signin">{t('nav.signIn')}</Link>
         </p>
       </section>
 
       <h2 className="section-title">{t('home.featuresHeading')}</h2>
       <div className="feature-grid">
-        {FEATURES.map(({ icon: Icon, key }) => (
-          <div key={key} className="feature-card">
+        {FEATURES.map(({ icon: Icon, key }, i) => (
+          <div key={key} className="feature-card" style={{ '--i': i } as CSSProperties}>
             <div className="feature-icon">
               <Icon size={20} aria-hidden="true" />
             </div>

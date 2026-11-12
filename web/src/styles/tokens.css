@@ -15,6 +15,12 @@
   --bg: #090d1a;
   --bg-tint-1: rgba(99, 102, 241, 0.14);
   --bg-tint-2: rgba(16, 185, 129, 0.08);
+  --bg-grad-1: #0a0f1f;
+  --bg-grad-2: #070a14;
+
+  /* Gradient used for the landing headline text */
+  --hero-grad-from: #ffffff;
+  --hero-grad-to: #a9b0cf;
 
   /* Glass surfaces */
   --surface: rgba(255, 255, 255, 0.045);
@@ -23,6 +29,13 @@
   --glass-blur: 14px;
   --line: rgba(255, 255, 255, 0.09);
   --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Form controls + panel sheen (overridden in light theme) */
+  --field-bg: rgba(255, 255, 255, 0.03);
+  --placeholder: rgba(255, 255, 255, 0.28);
+  --option-bg: #121829;
+  --sidebar-sheen-1: rgba(255, 255, 255, 0.05);
+  --sidebar-sheen-2: rgba(255, 255, 255, 0.02);
 
   /* Text */
   --text: #e8eaf4;
@@ -50,4 +63,49 @@
   --space-8: 32px;
   --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.25);
   --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+/*
+ * Light theme — applied when <html data-theme="light"> is set. The glass idea is
+ * kept: surfaces are translucent white that sit over a soft, bright gradient.
+ */
+:root[data-theme='light'] {
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(79, 70, 229, 0.1);
+  --accent-glow: rgba(79, 70, 229, 0.28);
+
+  --bg: #eef1f8;
+  --bg-tint-1: rgba(99, 102, 241, 0.12);
+  --bg-tint-2: rgba(16, 185, 129, 0.08);
+  --bg-grad-1: #ffffff;
+  --bg-grad-2: #eef1f8;
+
+  --hero-grad-from: #141a33;
+  --hero-grad-to: #4f46e5;
+
+  --surface: rgba(255, 255, 255, 0.72);
+  --raised: rgba(255, 255, 255, 0.85);
+  --surface-strong: rgba(255, 255, 255, 0.95);
+  --line: rgba(17, 24, 48, 0.1);
+  --line-strong: rgba(17, 24, 48, 0.18);
+
+  --field-bg: rgba(255, 255, 255, 0.75);
+  --placeholder: rgba(17, 24, 48, 0.4);
+  --option-bg: #ffffff;
+  --sidebar-sheen-1: rgba(255, 255, 255, 0.75);
+  --sidebar-sheen-2: rgba(255, 255, 255, 0.45);
+
+  --text: #141a30;
+  --muted: #5a6382;
+
+  --sent: #64748b;
+  --opened: #d97706;
+  --clicked: #ea580c;
+  --good: #059669;
+  --bad: #dc2626;
+
+  --shadow-sm: 0 2px 10px rgba(17, 24, 48, 0.08);
+  --shadow: 0 18px 50px rgba(17, 24, 48, 0.14);
 }

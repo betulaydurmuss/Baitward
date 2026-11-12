@@ -23,8 +23,11 @@ body {
   background-image:
     radial-gradient(1100px 700px at 12% -8%, var(--bg-tint-1), transparent 60%),
     radial-gradient(1000px 650px at 100% 0%, var(--bg-tint-2), transparent 55%),
-    linear-gradient(180deg, #0a0f1f 0%, #070a14 100%);
+    linear-gradient(180deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
   background-attachment: fixed;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease;
 }
 
 a {
@@ -60,7 +63,7 @@ code,
   flex-direction: column;
   gap: var(--space-2);
   padding: var(--space-6) var(--space-4);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(180deg, var(--sidebar-sheen-1), var(--sidebar-sheen-2));
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-right: 1px solid var(--line);
@@ -144,8 +147,25 @@ code,
 
 /* ---------- Landing hero ---------- */
 .hero {
+  position: relative;
   text-align: center;
   padding: var(--space-8) 0 var(--space-6);
+  isolation: isolate;
+}
+/* Soft, slowly drifting gradient glow behind the hero. */
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -20% -10% auto -10%;
+  height: 520px;
+  background:
+    radial-gradient(520px 320px at 30% 20%, var(--accent-glow), transparent 60%),
+    radial-gradient(480px 300px at 75% 10%, rgba(16, 185, 129, 0.22), transparent 60%);
+  filter: blur(18px);
+  opacity: 0.9;
+  animation: hero-drift 14s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 .hero-eyebrow {
   display: inline-flex;
@@ -156,9 +176,11 @@ code,
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
+  animation: rise-in 0.6s ease both;
 }
 .hero-eyebrow .dot {
   width: 7px;
@@ -166,17 +188,27 @@ code,
   border-radius: 999px;
   background: var(--good);
   box-shadow: 0 0 10px var(--good);
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 .hero-title {
   font-size: clamp(34px, 6vw, 58px);
   line-height: 1.04;
   letter-spacing: -0.03em;
   margin: 0 auto var(--space-4);
-  max-width: 760px;
-  background: linear-gradient(180deg, #ffffff 30%, #a9b0cf);
+  max-width: 780px;
+  background: linear-gradient(
+    110deg,
+    var(--hero-grad-from) 0%,
+    var(--accent-hover) 45%,
+    var(--hero-grad-to) 90%
+  );
+  background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation:
+    rise-in 0.6s ease 0.05s both,
+    hero-sheen 8s linear infinite;
 }
 .hero-lede {
   max-width: 600px;
@@ -184,6 +216,7 @@ code,
   color: var(--muted);
   font-size: 18px;
   line-height: 1.6;
+  animation: rise-in 0.6s ease 0.12s both;
 }
 .hero-cta {
   display: flex;
@@ -191,10 +224,26 @@ code,
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  animation: rise-in 0.6s ease 0.18s both;
 }
 .hero-cta .btn {
-  padding: 12px 22px;
+  padding: 13px 26px;
   font-size: 15px;
+}
+/* Gradient, glowing primary CTA on the landing. */
+.hero-cta .btn-primary {
+  background: linear-gradient(120deg, var(--accent-hover), var(--accent));
+  box-shadow: 0 10px 30px -8px var(--accent-glow);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+.hero-cta .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 38px -6px var(--accent-glow);
+}
+.hero-sub {
+  animation: rise-in 0.6s ease 0.24s both;
 }
 
 .section-title {
@@ -204,32 +253,86 @@ code,
   margin: var(--space-8) 0 var(--space-6);
 }
 
+/* Landing entrance + ambient animations. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-sheen {
+  to {
+    background-position: 220% center;
+  }
+}
+@keyframes hero-drift {
+  from {
+    transform: translate3d(-3%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 2%, 0) scale(1.08);
+  }
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px var(--good);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 2px var(--good);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero::before,
+  .hero-eyebrow,
+  .hero-eyebrow .dot,
+  .hero-title,
+  .hero-lede,
+  .hero-cta,
+  .hero-sub,
+  .feature-card {
+    animation: none !important;
+  }
+}
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--space-4);
 }
 .feature-card {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: var(--space-6);
   backdrop-filter: blur(var(--glass-blur));
   transition:
-    transform 0.15s,
-    border-color 0.15s;
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  animation: rise-in 0.5s ease both;
+  animation-delay: calc(var(--i, 0) * 70ms);
 }
 .feature-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   border-color: var(--line-strong);
+  box-shadow: 0 16px 40px -18px var(--accent-glow);
 }
 .feature-icon {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: var(--accent-soft);
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  border: 1px solid var(--line);
   color: var(--accent-hover);
   margin-bottom: var(--space-3);
 }
@@ -310,7 +413,7 @@ textarea {
   padding: 11px var(--space-3);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--field-bg);
   color: var(--text);
   font: inherit;
   width: 100%;
@@ -322,7 +425,7 @@ textarea {
 }
 .field input::placeholder,
 textarea::placeholder {
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--placeholder);
 }
 .field input:focus,
 select:focus,
@@ -332,7 +435,7 @@ textarea:focus {
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 select option {
-  background: #121829;
+  background: var(--option-bg);
   color: var(--text);
 }
 

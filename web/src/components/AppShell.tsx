@@ -20,6 +20,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { Logo } from '../brand/Logo';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 import { useAuth } from '../auth/AuthContext';
 
 const NAV: { to: string; icon: LucideIcon; key: string; adminOnly?: boolean }[] = [
@@ -66,6 +67,7 @@ export function AppShell() {
           ))}
         </nav>
         <div className="sidebar-footer">
+          <ThemeToggle />
           <LanguageSwitcher />
           <button
             className="lang-switch"

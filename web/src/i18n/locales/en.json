@@ -71,6 +71,9 @@
     "bands": { "low": "Low", "medium": "Medium", "high": "High" }
   },
   "language": "Language",
+  "theme": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
   "common": {
     "loading": "Loading…",
     "delete": "Delete"

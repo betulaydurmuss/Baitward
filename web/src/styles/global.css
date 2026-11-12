@@ -140,7 +140,7 @@ code,
   backdrop-filter: blur(var(--glass-blur));
 }
 .public-main {
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: var(--space-8) var(--space-6);
 }
@@ -148,9 +148,45 @@ code,
 /* ---------- Landing hero ---------- */
 .hero {
   position: relative;
-  text-align: center;
   padding: var(--space-8) 0 var(--space-6);
   isolation: isolate;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+.hero-copy {
+  text-align: left;
+}
+.hero-copy .hero-title,
+.hero-copy .hero-lede {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 560px;
+}
+.hero-copy .hero-cta {
+  justify-content: flex-start;
+}
+@media (max-width: 860px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-copy {
+    text-align: center;
+  }
+  .hero-copy .hero-title,
+  .hero-copy .hero-lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-copy .hero-cta {
+    justify-content: center;
+  }
+  .hero-visual {
+    order: -1;
+  }
 }
 /* Soft, slowly drifting gradient glow behind the hero. */
 .hero::before {
@@ -345,6 +381,235 @@ code,
   color: var(--muted);
   font-size: 14px;
   line-height: 1.55;
+}
+
+.hero-cta .btn,
+.cta-band .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- Hero product-preview card ---------- */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  animation: rise-in 0.7s ease 0.2s both;
+}
+.preview-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--raised);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow);
+  animation: float-card 6s ease-in-out infinite;
+}
+.preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+.preview-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+.preview-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-hover);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.funnel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.funnel-row {
+  display: grid;
+  grid-template-columns: 74px 1fr 42px;
+  align-items: center;
+  gap: var(--space-3);
+}
+.funnel-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+.funnel-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--field-bg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.funnel-bar {
+  display: block;
+  height: 100%;
+  width: var(--w);
+  border-radius: 999px;
+  transform-origin: left center;
+  animation: grow-bar 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d) both;
+}
+.funnel-pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  color: var(--text);
+}
+
+/* ---------- Honest stat strip ---------- */
+.stat-strip {
+  margin: var(--space-8) 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+  padding: var(--space-6);
+}
+.stat-cell {
+  text-align: center;
+  padding: var(--space-2) var(--space-3);
+}
+.stat-value {
+  display: block;
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(120deg, var(--accent-hover), var(--good));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- How it works ---------- */
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+.step-card {
+  position: relative;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  backdrop-filter: blur(var(--glass-blur));
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease;
+}
+.step-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+}
+.step-num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: var(--space-3);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--accent-contrast);
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  box-shadow: 0 8px 20px -8px var(--accent-glow);
+}
+.step-card h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 16px;
+}
+.step-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* ---------- Closing CTA band ---------- */
+.cta-band {
+  margin-top: var(--space-8);
+  text-align: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: var(--space-8) var(--space-6);
+  background:
+    radial-gradient(600px 300px at 50% -40%, var(--accent-soft), transparent 70%), var(--surface);
+  backdrop-filter: blur(var(--glass-blur));
+}
+.cta-band h2 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -0.02em;
+}
+.cta-band p {
+  margin: 0 auto var(--space-6);
+  max-width: 460px;
+  color: var(--muted);
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes grow-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes float-card {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual,
+  .preview-card,
+  .funnel-bar {
+    animation: none !important;
+  }
+  .preview-card {
+    transform: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .guarantee-banner {

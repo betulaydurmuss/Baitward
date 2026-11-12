@@ -213,6 +213,37 @@
     "cta": "Ücretsiz başla",
     "haveAccount": "Zaten hesabınız var mı?",
     "featuresHeading": "Güvenli bir simülasyon için ihtiyacınız olan her şey",
+    "preview": {
+      "title": "Kampanya hunisi",
+      "tag": "Örnek"
+    },
+    "stats": {
+      "bilingual": { "v": "TR · EN", "l": "Çift dilli arayüz ve içerik" },
+      "privacy": { "v": "0", "l": "Saklanan hassas form verisi" },
+      "security": { "v": "2FA", "l": "Zorunlu yönetici güvenliği" },
+      "audit": { "v": "PDF", "l": "Denetime hazır raporlar" }
+    },
+    "how": {
+      "title": "Nasıl çalışır?",
+      "steps": {
+        "setup": {
+          "title": "Kurun ve hedefleyin",
+          "desc": "Alan adınızı doğrulayın ve test etmeye yetkili olduğunuz çalışanları ekleyin."
+        },
+        "launch": {
+          "title": "Simülasyonu başlatın",
+          "desc": "Çift dilli bir şablon seçin, güvenli bir hızda gönderin ve huniyi canlı izleyin."
+        },
+        "train": {
+          "title": "Anında eğitin",
+          "desc": "Tıklayan herkes kısa bir ders ve quiz alır; insan riski skoru otomatik güncellenir."
+        }
+      }
+    },
+    "cta2": {
+      "title": "Ekibinizi bugün daha güvenli hale getirin",
+      "desc": "Dakikalar içinde kurun. Gerçek veri yok, gerçek risk yok — yalnızca daha bilinçli bir ekip."
+    },
     "features": {
       "campaigns": {
         "title": "Kampanya motoru",

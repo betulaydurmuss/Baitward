@@ -213,6 +213,37 @@
     "cta": "Get started",
     "haveAccount": "Already have an account?",
     "featuresHeading": "Everything you need to run a safe simulation",
+    "preview": {
+      "title": "Campaign funnel",
+      "tag": "Sample"
+    },
+    "stats": {
+      "bilingual": { "v": "TR · EN", "l": "Bilingual interface and content" },
+      "privacy": { "v": "0", "l": "Sensitive form data stored" },
+      "security": { "v": "2FA", "l": "Enforced admin security" },
+      "audit": { "v": "PDF", "l": "Audit-ready reports" }
+    },
+    "how": {
+      "title": "How it works",
+      "steps": {
+        "setup": {
+          "title": "Set up and target",
+          "desc": "Verify your domain and add the employees you are authorised to test."
+        },
+        "launch": {
+          "title": "Launch the simulation",
+          "desc": "Pick a bilingual template, drip it at a safe rate, and watch the funnel live."
+        },
+        "train": {
+          "title": "Train instantly",
+          "desc": "Anyone who clicks gets a short lesson and quiz; the human-risk score updates automatically."
+        }
+      }
+    },
+    "cta2": {
+      "title": "Make your team safer today",
+      "desc": "Set up in minutes. No real data, no real risk — just a more aware team."
+    },
     "features": {
       "campaigns": {
         "title": "Campaign engine",

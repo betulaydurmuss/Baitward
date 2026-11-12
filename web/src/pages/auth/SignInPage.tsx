@@ -29,7 +29,7 @@ export function SignInPage() {
       const res = await api.post<LoginResponse>('/auth/login', { email, password });
       if ('accessToken' in res) {
         applySession(res);
-        navigate('/');
+        navigate('/dashboard');
       } else if ('twoFactorRequired' in res) {
         setPendingToken(res.pendingToken);
       } else {
@@ -53,7 +53,7 @@ export function SignInPage() {
         code,
       });
       applySession(res);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t('auth.errors.generic'));
     } finally {

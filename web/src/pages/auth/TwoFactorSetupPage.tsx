@@ -73,7 +73,7 @@ export function TwoFactorSetupPage() {
         <button
           className="btn btn-primary"
           style={{ marginTop: 'var(--space-4)' }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/dashboard')}
         >
           {t('auth.twoFactor.done')}
         </button>

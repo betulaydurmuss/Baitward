@@ -10,7 +10,8 @@ export async function htmlToPdf(html: string): Promise<Buffer> {
   });
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // The report HTML is self-contained (no external resources), so 'load' is enough.
+    await page.setContent(html, { waitUntil: 'load' });
     const pdf = await page.pdf({
       format: 'A4',
       printBackground: true,

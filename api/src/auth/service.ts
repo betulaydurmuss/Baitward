@@ -223,11 +223,28 @@ export function createAuthService(prisma: PrismaClient) {
     // returned, along with a fresh access token.
     async refresh(input: { refreshToken?: string; ip?: string; userAgent?: string }) {
       if (!input.refreshToken) throw new AppError(401, 'no_session', 'Not authenticated');
+      const presentedHash = sha256(input.refreshToken);
       const session = await prisma.session.findFirst({
-        where: { refreshTokenHash: sha256(input.refreshToken) },
+        where: { refreshTokenHash: presentedHash },
         include: { user: true },
       });
-      if (!session || session.revokedAt || session.expiresAt.getTime() < Date.now()) {
+
+      if (!session) {
+        // The token does not match any live session. If it matches a session's
+        // *previous* token, an already-rotated token is being replayed — a sign of
+        // theft — so revoke that session, cutting off whoever else holds it.
+        const reused = await prisma.session.findFirst({
+          where: { previousTokenHash: presentedHash, revokedAt: null },
+        });
+        if (reused) {
+          await prisma.session.update({
+            where: { id: reused.id },
+            data: { revokedAt: new Date() },
+          });
+        }
+        throw new AppError(401, 'invalid_session', 'Session expired, sign in again');
+      }
+      if (session.revokedAt || session.expiresAt.getTime() < Date.now()) {
         throw new AppError(401, 'invalid_session', 'Session expired, sign in again');
       }
       const newRefresh = generateOpaqueToken();
@@ -235,6 +252,8 @@ export function createAuthService(prisma: PrismaClient) {
         where: { id: session.id },
         data: {
           refreshTokenHash: sha256(newRefresh),
+          // Remember the token we are rotating away from, to catch its later replay.
+          previousTokenHash: presentedHash,
           lastUsedAt: new Date(),
           ip: input.ip,
           userAgent: input.userAgent,

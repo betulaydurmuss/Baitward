@@ -115,6 +115,9 @@ model Session {
   id               String    @id @default(cuid())
   userId           String    @map("user_id")
   refreshTokenHash String    @map("refresh_token_hash")
+  // The hash of the immediately-previous refresh token, kept after rotation so a
+  // replay of an already-rotated token is detected as theft and revokes the session.
+  previousTokenHash String?  @map("previous_token_hash")
   ip               String?
   userAgent        String?   @map("user_agent")
   createdAt        DateTime  @default(now()) @map("created_at")

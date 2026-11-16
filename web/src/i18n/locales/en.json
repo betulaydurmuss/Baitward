@@ -114,7 +114,9 @@
     "hard": "Hard",
     "category": "Category",
     "add": "Add template",
-    "empty": "No templates yet. Create your first simulated email."
+    "empty": "No templates yet. Create your first simulated email.",
+    "sendTest": "Send test to me",
+    "testSent": "Test email sent to {{email}} (view it in Mailpit)."
   },
   "campaigns": {
     "title": "Campaigns",

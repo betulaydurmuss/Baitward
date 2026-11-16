@@ -4,6 +4,7 @@
 import type { PrismaClient, Difficulty, Locale } from '@prisma/client';
 import { AppError } from '../lib/http-error.js';
 import { assertTemplateUrlsSafe } from '../lib/ssrf.js';
+import { getPreviewQueue } from '../lib/queue.js';
 
 export type TemplateInput = {
   name: string;
@@ -44,6 +45,18 @@ export function createTemplateService(prisma: PrismaClient) {
     async remove(orgId: string, id: string) {
       await this.get(orgId, id);
       await prisma.emailTemplate.delete({ where: { id } });
+    },
+
+    // Enqueues a one-off preview send of the template to the requesting admin's own
+    // address. The worker composes and sends it; nothing is tracked or recorded.
+    async sendTest(orgId: string, id: string, toEmail: string) {
+      await this.get(orgId, id); // confirms the template belongs to this org
+      await getPreviewQueue().add(
+        'preview',
+        { templateId: id, orgId, toEmail },
+        { removeOnComplete: true, removeOnFail: true },
+      );
+      return { sent: true, to: toEmail };
     },
   };
 }

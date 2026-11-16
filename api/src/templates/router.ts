@@ -68,5 +68,18 @@ export function createTemplatesRouter(prisma: PrismaClient): Router {
     }),
   );
 
+  // Send a preview of this template to the signed-in admin's own address.
+  router.post(
+    '/:id/test',
+    asyncHandler(async (req, res) => {
+      const user = await prisma.user.findUnique({
+        where: { id: req.auth!.userId },
+        select: { email: true },
+      });
+      if (!user) throw new AppError(404, 'not_found', 'User not found');
+      res.json(await service.sendTest(req.auth!.orgId, id(req), user.email));
+    }),
+  );
+
   return router;
 }

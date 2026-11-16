@@ -114,7 +114,9 @@
     "hard": "Zor",
     "category": "Kategori",
     "add": "Şablon ekle",
-    "empty": "Henüz şablon yok. İlk simülasyon e-postanızı oluşturun."
+    "empty": "Henüz şablon yok. İlk simülasyon e-postanızı oluşturun.",
+    "sendTest": "Bana test gönder",
+    "testSent": "Test maili {{email}} adresine gönderildi (Mailpit'te görüntüleyin)."
   },
   "campaigns": {
     "title": "Kampanyalar",

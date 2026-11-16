@@ -5,6 +5,8 @@ export const QUEUE_NAMES = {
   send: 'send',
   // Scheduled report generation and delivery.
   schedule: 'schedule',
+  // One-off test/preview sends of a template to the requesting admin.
+  preview: 'preview',
 } as const;
 
 export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];

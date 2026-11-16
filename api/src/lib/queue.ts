@@ -9,15 +9,28 @@ import { Redis } from 'ioredis';
 import { env } from '../env.js';
 
 export const SEND_QUEUE = 'send';
+export const PREVIEW_QUEUE = 'preview';
 
 export type SendJob = { campaignTargetId: string };
+export type PreviewJob = { templateId: string; orgId: string; toEmail: string };
 
 let queue: Queue<SendJob> | null = null;
+let previewQueue: Queue<PreviewJob> | null = null;
+
+// Lazily share one Redis connection across the producer queues.
+let connection: Redis | null = null;
+function getConnection(): Redis {
+  if (!connection) connection = new Redis(env.REDIS_URL, { maxRetriesPerRequest: null });
+  return connection;
+}
 
 export function getSendQueue(): Queue<SendJob> {
-  if (!queue) {
-    const connection = new Redis(env.REDIS_URL, { maxRetriesPerRequest: null });
-    queue = new Queue<SendJob>(SEND_QUEUE, { connection });
-  }
+  if (!queue) queue = new Queue<SendJob>(SEND_QUEUE, { connection: getConnection() });
   return queue;
+}
+
+export function getPreviewQueue(): Queue<PreviewJob> {
+  if (!previewQueue)
+    previewQueue = new Queue<PreviewJob>(PREVIEW_QUEUE, { connection: getConnection() });
+  return previewQueue;
 }

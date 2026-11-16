@@ -26,6 +26,7 @@ export function TemplatesPage() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [category, setCategory] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const templates = useQuery({
     queryKey: ['templates'],
@@ -50,6 +51,12 @@ export function TemplatesPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['templates'] }),
   });
 
+  const sendTest = useMutation({
+    mutationFn: (id: string) => api.post<{ to: string }>(`/templates/${id}/test`),
+    onSuccess: (res) => setNotice(t('templates.testSent', { email: res.to })),
+    onError: (err) => setError(err instanceof ApiError ? err.message : t('auth.errors.generic')),
+  });
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     create.mutate({ name, locale, subject, html, difficulty, category: category || undefined });
@@ -60,6 +67,12 @@ export function TemplatesPage() {
       <div className="toolbar">
         <h1 className="page-title">{t('templates.title')}</h1>
       </div>
+
+      {notice && (
+        <p className="form-notice" style={{ color: 'var(--good)' }}>
+          {notice}
+        </p>
+      )}
 
       <form className="card card-form" onSubmit={onSubmit}>
         {error && <p className="form-error">{error}</p>}
@@ -145,7 +158,15 @@ export function TemplatesPage() {
                 <td>{tpl.locale.toUpperCase()}</td>
                 <td className="muted">{tpl.subject}</td>
                 <td>{t(`templates.${tpl.difficulty}`)}</td>
-                <td style={{ textAlign: 'right' }}>
+                <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                  <button
+                    className="btn btn-sm"
+                    style={{ marginRight: 8 }}
+                    onClick={() => sendTest.mutate(tpl.id)}
+                    disabled={sendTest.isPending}
+                  >
+                    {t('templates.sendTest')}
+                  </button>
                   <button className="btn btn-danger btn-sm" onClick={() => remove.mutate(tpl.id)}>
                     {t('common.delete')}
                   </button>

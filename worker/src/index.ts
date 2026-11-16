@@ -6,6 +6,7 @@ import { Redis } from 'ioredis';
 import { QUEUE_NAMES } from './queues.js';
 import { workerEnv } from './env.js';
 import { processSend, type SendJob } from './send-processor.js';
+import { processPreview, type PreviewJob } from './preview-processor.js';
 import { runScheduledDigest, runRetentionPurge } from './schedule-processor.js';
 
 const connection = new Redis(workerEnv.REDIS_URL, { maxRetriesPerRequest: null });
@@ -17,6 +18,12 @@ sendWorker.on('completed', (job) => {
 });
 sendWorker.on('failed', (job, err) => {
   console.error(`Send job ${job?.id} failed: ${err.message}`);
+});
+
+// One-off test/preview sends to the requesting admin.
+const previewWorker = new Worker<PreviewJob>(QUEUE_NAMES.preview, processPreview, { connection });
+previewWorker.on('failed', (job, err) => {
+  console.error(`Preview job ${job?.id} failed: ${err.message}`);
 });
 
 // Runs scheduled work, dispatched by job name: a monthly awareness digest to each

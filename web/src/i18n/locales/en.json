@@ -39,7 +39,14 @@
     "when": "When",
     "action": "Action",
     "target": "Target",
-    "actor": "Actor"
+    "actor": "Actor",
+    "settings": "Organisation settings",
+    "retentionDays": "Data retention (days)",
+    "retentionHint": "Behavioural data (events, training records) older than this is deleted automatically every day. 0 = keep indefinitely.",
+    "monthlyLimit": "Monthly send limit",
+    "monthlyLimitHint": "The most simulation emails the organisation can send in a month.",
+    "saveSettings": "Save settings",
+    "saved": "Saved"
   },
   "domains": {
     "title": "Domains",

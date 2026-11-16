@@ -1,3 +1,4 @@
+import { useEffect, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { api } from '../lib/api';
@@ -6,7 +7,7 @@ type HealthData = {
   queue: Record<string, number>;
   last24h: { sends: number; events: number };
   campaignsSending: number;
-  org: { monthlySendLimit: number; verifiedDomain: string | null };
+  org: { monthlySendLimit: number; verifiedDomain: string | null; dataRetentionDays: number };
 };
 type AdminUser = {
   id: string;
@@ -68,6 +69,31 @@ export function AdminPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-audit'] }),
   });
 
+  // Organisation settings form, seeded from the health payload once it loads.
+  const [retention, setRetention] = useState('');
+  const [limit, setLimit] = useState('');
+  useEffect(() => {
+    if (health.data) {
+      setRetention(String(health.data.org.dataRetentionDays));
+      setLimit(String(health.data.org.monthlySendLimit));
+    }
+  }, [health.data]);
+
+  const saveSettings = useMutation({
+    mutationFn: async () => {
+      await api.post('/admin/retention', { dataRetentionDays: Number(retention) });
+      await api.post('/admin/limit', { monthlySendLimit: Number(limit) });
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-health'] });
+      qc.invalidateQueries({ queryKey: ['admin-audit'] });
+    },
+  });
+  const onSaveSettings = (e: FormEvent) => {
+    e.preventDefault();
+    saveSettings.mutate();
+  };
+
   const fmt = (iso: string) => new Date(iso).toLocaleString(i18n.resolvedLanguage);
 
   return (
@@ -86,6 +112,52 @@ export function AdminPage() {
             <Stat label={t('admin.sending')} value={health.data.campaignsSending} />
           </div>
         )}
+      </section>
+
+      <section>
+        <h2 style={{ fontSize: 15, marginBottom: 'var(--space-4)' }}>{t('admin.settings')}</h2>
+        <form className="card card-form" onSubmit={onSaveSettings} style={{ maxWidth: 520 }}>
+          <div className="row-2">
+            <div className="field" style={{ margin: 0 }}>
+              <label htmlFor="retention">{t('admin.retentionDays')}</label>
+              <input
+                id="retention"
+                type="number"
+                min={0}
+                max={3650}
+                value={retention}
+                onChange={(e) => setRetention(e.target.value)}
+              />
+              <small className="muted">{t('admin.retentionHint')}</small>
+            </div>
+            <div className="field" style={{ margin: 0 }}>
+              <label htmlFor="limit">{t('admin.monthlyLimit')}</label>
+              <input
+                id="limit"
+                type="number"
+                min={0}
+                max={1000000}
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
+              />
+              <small className="muted">{t('admin.monthlyLimitHint')}</small>
+            </div>
+          </div>
+          <div style={{ marginTop: 'var(--space-4)' }}>
+            <button
+              className="btn btn-primary"
+              style={{ width: 'auto' }}
+              disabled={saveSettings.isPending}
+            >
+              {saveSettings.isPending ? t('common.loading') : t('admin.saveSettings')}
+            </button>
+            {saveSettings.isSuccess && (
+              <span className="muted" style={{ marginLeft: 12, color: 'var(--good)' }}>
+                {t('admin.saved')}
+              </span>
+            )}
+          </div>
+        </form>
       </section>
 
       <section>

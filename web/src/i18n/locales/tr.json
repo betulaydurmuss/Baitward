@@ -39,7 +39,14 @@
     "when": "Zaman",
     "action": "İşlem",
     "target": "Hedef",
-    "actor": "Yapan"
+    "actor": "Yapan",
+    "settings": "Kurum ayarları",
+    "retentionDays": "Veri saklama süresi (gün)",
+    "retentionHint": "Bu süreden eski davranış verileri (olaylar, eğitim kayıtları) her gün otomatik silinir. 0 = süresiz sakla.",
+    "monthlyLimit": "Aylık gönderim limiti",
+    "monthlyLimitHint": "Kurumun bir ayda gönderebileceği en fazla simülasyon e-postası.",
+    "saveSettings": "Ayarları kaydet",
+    "saved": "Kaydedildi"
   },
   "domains": {
     "title": "Alan adları",

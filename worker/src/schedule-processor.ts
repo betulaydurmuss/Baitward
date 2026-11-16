@@ -60,3 +60,36 @@ export async function runScheduledDigest(): Promise<number> {
   }
   return sentCount;
 }
+
+// Data-retention purge (KVKK): for each organisation, delete behavioural data older
+// than its retention window. Only events and training completions are removed — the
+// recipients and campaigns themselves are kept, so the audit trail of *what was run*
+// remains while the per-person behavioural history ages out. A window of 0 (or less)
+// means "keep indefinitely" and is skipped.
+export async function runRetentionPurge(now = new Date()): Promise<number> {
+  const orgs = await prisma.organization.findMany({
+    select: { id: true, dataRetentionDays: true },
+  });
+
+  let deleted = 0;
+  for (const org of orgs) {
+    const days = org.dataRetentionDays;
+    if (!days || days <= 0) continue; // keep indefinitely
+    const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+
+    const events = await prisma.event.deleteMany({
+      where: {
+        createdAt: { lt: cutoff },
+        campaignTarget: { campaign: { orgId: org.id } },
+      },
+    });
+    const completions = await prisma.trainingCompletion.deleteMany({
+      where: {
+        completedAt: { lt: cutoff },
+        campaignTarget: { campaign: { orgId: org.id } },
+      },
+    });
+    deleted += events.count + completions.count;
+  }
+  return deleted;
+}

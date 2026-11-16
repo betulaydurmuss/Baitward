@@ -62,6 +62,16 @@ export function createAdminRouter(prisma: PrismaClient): Router {
     }),
   );
 
+  router.post(
+    '/retention',
+    asyncHandler(async (req, res) => {
+      const { dataRetentionDays } = z
+        .object({ dataRetentionDays: z.number().int().min(0).max(3650) })
+        .parse(req.body);
+      res.json(await service.setRetentionDays(req.auth!.orgId, dataRetentionDays, actor(req)));
+    }),
+  );
+
   router.get(
     '/system/health',
     asyncHandler(async (req, res) => {

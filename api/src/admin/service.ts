@@ -96,6 +96,20 @@ export function createAdminService(prisma: PrismaClient) {
       return { ok: true };
     },
 
+    // Behavioural-data retention window in days (0 = keep indefinitely). Enforced by
+    // the worker's daily retention purge.
+    async setRetentionDays(orgId: string, dataRetentionDays: number, actor: Actor) {
+      await prisma.organization.update({ where: { id: orgId }, data: { dataRetentionDays } });
+      await writeAudit(prisma, {
+        orgId,
+        actorId: actor.actorId,
+        action: 'org.set_retention',
+        target: String(dataRetentionDays),
+        ip: actor.ip,
+      });
+      return { ok: true };
+    },
+
     async getHealth(orgId: string) {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const [queue, sends24h, events24h, sending, org] = await Promise.all([
@@ -107,7 +121,7 @@ export function createAdminService(prisma: PrismaClient) {
         prisma.campaign.count({ where: { orgId, status: 'sending' } }),
         prisma.organization.findUniqueOrThrow({
           where: { id: orgId },
-          select: { monthlySendLimit: true, verifiedDomain: true },
+          select: { monthlySendLimit: true, verifiedDomain: true, dataRetentionDays: true },
         }),
       ]);
       return {

@@ -16,5 +16,12 @@ export function createRiskRouter(prisma: PrismaClient): Router {
     }),
   );
 
+  router.get(
+    '/insights',
+    asyncHandler(async (req, res) => {
+      res.json(await service.getInsights(req.auth!.orgId));
+    }),
+  );
+
   return router;
 }

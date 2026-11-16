@@ -51,5 +51,55 @@ export function createRiskService(prisma: PrismaClient) {
 
       return { byTarget, byDepartment };
     },
+
+    // Behavioural insights across campaigns: who keeps falling for simulations
+    // (repeat offenders, a coaching signal) and who keeps reporting them (the most
+    // positive behaviour, worth recognising). Counted per distinct campaign.
+    async getInsights(orgId: string) {
+      const rows = await prisma.campaignTarget.findMany({
+        where: { campaign: { orgId } },
+        select: {
+          targetId: true,
+          target: { select: { email: true, department: true } },
+          events: { select: { type: true } },
+        },
+      });
+
+      const agg = new Map<
+        string,
+        {
+          email: string;
+          department: string;
+          failures: number;
+          reports: number;
+          simulations: number;
+        }
+      >();
+      for (const r of rows) {
+        const e = agg.get(r.targetId) ?? {
+          email: r.target.email,
+          department: r.target.department || 'Unknown',
+          failures: 0,
+          reports: 0,
+          simulations: 0,
+        };
+        e.simulations += 1;
+        const types = new Set(r.events.map((x) => x.type));
+        if (types.has('clicked') || types.has('submitted')) e.failures += 1;
+        if (types.has('reported')) e.reports += 1;
+        agg.set(r.targetId, e);
+      }
+
+      const all = [...agg.entries()].map(([targetId, v]) => ({ targetId, ...v }));
+      const repeatOffenders = all
+        .filter((x) => x.failures >= 2)
+        .sort((a, b) => b.failures - a.failures || b.simulations - a.simulations)
+        .slice(0, 20);
+      const topReporters = all
+        .filter((x) => x.reports >= 1)
+        .sort((a, b) => b.reports - a.reports)
+        .slice(0, 20);
+      return { repeatOffenders, topReporters };
+    },
   };
 }

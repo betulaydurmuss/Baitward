@@ -75,7 +75,14 @@
     "score": "Score",
     "band": "Band",
     "people": "people",
-    "bands": { "low": "Low", "medium": "Medium", "high": "High" }
+    "bands": { "low": "Low", "medium": "Medium", "high": "High" },
+    "repeatTitle": "Repeat offenders",
+    "repeatNote": "People who clicked or submitted in more than one campaign — a priority for coaching.",
+    "failCount": "Times caught",
+    "simCount": "Simulations",
+    "reportersTitle": "Top reporters",
+    "reportersNote": "People who reported the phish — the best behaviour, worth recognising.",
+    "reportCount": "Reports"
   },
   "language": "Language",
   "theme": "Theme",

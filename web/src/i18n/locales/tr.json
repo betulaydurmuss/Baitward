@@ -75,7 +75,14 @@
     "score": "Skor",
     "band": "Seviye",
     "people": "kişi",
-    "bands": { "low": "Düşük", "medium": "Orta", "high": "Yüksek" }
+    "bands": { "low": "Düşük", "medium": "Orta", "high": "Yüksek" },
+    "repeatTitle": "Tekrar tuzağa düşenler",
+    "repeatNote": "Birden fazla kampanyada tıklayan veya veri giren kişiler — öncelikli eğitim ihtiyacı.",
+    "failCount": "Tuzağa düşme",
+    "simCount": "Simülasyon",
+    "reportersTitle": "Oltayı bildirenler",
+    "reportersNote": "Şüpheli maili bildiren kişiler — en doğru davranış, takdir edilmeli.",
+    "reportCount": "Bildirim"
   },
   "language": "Dil",
   "theme": "Tema",

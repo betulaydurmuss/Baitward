@@ -8,6 +8,16 @@ type Scores = {
   byDepartment: { department: string; score: number; band: Band; count: number }[];
 };
 
+type Person = {
+  targetId: string;
+  email: string;
+  department: string;
+  failures: number;
+  reports: number;
+  simulations: number;
+};
+type Insights = { repeatOffenders: Person[]; topReporters: Person[] };
+
 const BAND_COLOR: Record<Band, string> = {
   low: 'var(--good)',
   medium: 'var(--clicked)',
@@ -19,6 +29,11 @@ export function RiskPage() {
   const scores = useQuery({
     queryKey: ['risk'],
     queryFn: () => api.get<Scores>('/risk/scores'),
+    refetchInterval: 30_000,
+  });
+  const insights = useQuery({
+    queryKey: ['risk-insights'],
+    queryFn: () => api.get<Insights>('/risk/insights'),
     refetchInterval: 30_000,
   });
 
@@ -93,6 +108,70 @@ export function RiskPage() {
                     {p.score}
                   </td>
                   <td style={{ color: BAND_COLOR[p.band] }}>{t(`risk.bands.${p.band}`)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      <section>
+        <h2 style={{ fontSize: 15, marginBottom: 'var(--space-2)' }}>{t('risk.repeatTitle')}</h2>
+        <p className="muted" style={{ margin: '0 0 var(--space-4)', fontSize: 13 }}>
+          {t('risk.repeatNote')}
+        </p>
+        {!insights.data || insights.data.repeatOffenders.length === 0 ? (
+          <p className="muted">{t('detail.noData')}</p>
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{t('targets.email')}</th>
+                <th>{t('targets.department')}</th>
+                <th>{t('risk.failCount')}</th>
+                <th>{t('risk.simCount')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {insights.data.repeatOffenders.map((p) => (
+                <tr key={p.targetId}>
+                  <td>{p.email}</td>
+                  <td className="muted">{p.department}</td>
+                  <td className="mono" style={{ color: 'var(--bad)', fontWeight: 600 }}>
+                    {p.failures}
+                  </td>
+                  <td className="mono muted">{p.simulations}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      <section>
+        <h2 style={{ fontSize: 15, marginBottom: 'var(--space-2)' }}>{t('risk.reportersTitle')}</h2>
+        <p className="muted" style={{ margin: '0 0 var(--space-4)', fontSize: 13 }}>
+          {t('risk.reportersNote')}
+        </p>
+        {!insights.data || insights.data.topReporters.length === 0 ? (
+          <p className="muted">{t('detail.noData')}</p>
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{t('targets.email')}</th>
+                <th>{t('targets.department')}</th>
+                <th>{t('risk.reportCount')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {insights.data.topReporters.map((p) => (
+                <tr key={p.targetId}>
+                  <td>{p.email}</td>
+                  <td className="muted">{p.department}</td>
+                  <td className="mono" style={{ color: 'var(--good)', fontWeight: 600 }}>
+                    {p.reports}
+                  </td>
                 </tr>
               ))}
             </tbody>

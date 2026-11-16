@@ -154,14 +154,6 @@ curl -s https://<your-deployment-url>/api/health
 # {"status":"ok","service":"baitward-api","version":"0.1.0","time":"..."}
 ```
 
-## Roadmap
-
-| Stage | Work                                                                    |
-| ----- | ----------------------------------------------------------------------- |
-| Core  | Auth, campaigns, tracking, training, reporting, admin — **done**        |
-| Next  | SMS / voice / QR channels, gamification, scheduled recurring campaigns  |
-| Later | SSO (SAML/OIDC), SCIM provisioning, SIEM integration, benchmark reports |
-
 ## License
 
 MIT — see [LICENSE](LICENSE).

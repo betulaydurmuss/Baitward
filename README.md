@@ -8,7 +8,7 @@ a bilingual template; the platform sends controlled simulated emails at a drip r
 measures who opens, clicks and submits, teaches the moment someone slips, and reports
 to the organisation in an audit-ready form.
 
-> **Live demo:** `<your-deployment-url>` — see [Deployment](#deployment).
+![The Baitward landing page](docs/screenshots/landing.png)
 
 ![The dashboard with a campaign funnel](docs/screenshots/dashboard.png)
 

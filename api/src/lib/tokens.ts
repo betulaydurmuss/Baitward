@@ -42,7 +42,8 @@ export function signAccessToken(input: { userId: string; orgId: string; role: Ro
 }
 
 export function verifyAccessToken(token: string): AccessClaims {
-  const decoded = jwt.verify(token, env.AUTH_ACCESS_SECRET);
+  // Pin the algorithm so a token cannot be accepted under a different scheme.
+  const decoded = jwt.verify(token, env.AUTH_ACCESS_SECRET, { algorithms: ['HS256'] });
   if (typeof decoded === 'string' || decoded.typ !== 'access') {
     throw new Error('Not an access token');
   }
@@ -55,7 +56,7 @@ export function signPendingToken(userId: string, purpose: PendingPurpose): strin
 }
 
 export function verifyPendingToken(token: string): PendingClaims {
-  const decoded = jwt.verify(token, env.AUTH_ACCESS_SECRET);
+  const decoded = jwt.verify(token, env.AUTH_ACCESS_SECRET, { algorithms: ['HS256'] });
   if (typeof decoded === 'string' || decoded.typ !== 'pending') {
     throw new Error('Not a pending token');
   }

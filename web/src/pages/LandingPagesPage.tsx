@@ -115,6 +115,9 @@ export function LandingPagesPage() {
             <iframe
               title="preview"
               srcDoc={previewHtml(html)}
+              // Render the untrusted authored HTML inert: no scripts, no same-origin
+              // access, no form submission. Preview is visual only.
+              sandbox=""
               style={{
                 width: '100%',
                 minHeight: 220,

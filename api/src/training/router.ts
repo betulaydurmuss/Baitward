@@ -6,13 +6,15 @@ import { requireAuth } from '../middleware/auth.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { AppError } from '../lib/http-error.js';
 
-const quizSchema = z.array(
-  z.object({
-    question: z.string().min(1),
-    options: z.array(z.string().min(1)).min(2).max(6),
-    answer: z.number().int().min(0),
-  }),
-);
+const quizSchema = z
+  .array(
+    z.object({
+      question: z.string().min(1).max(500),
+      options: z.array(z.string().min(1).max(300)).min(2).max(6),
+      answer: z.number().int().min(0),
+    }),
+  )
+  .max(50);
 const createSchema = z.object({
   title: z.string().min(1).max(160),
   locale: z.enum(['tr', 'en']),

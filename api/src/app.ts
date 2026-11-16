@@ -27,8 +27,9 @@ export function createApp(prisma: PrismaClient) {
 
   // Do not advertise the framework.
   app.disable('x-powered-by');
-  // One proxy hop in deployment; makes req.ip and rate limiting see the real client.
-  app.set('trust proxy', 1);
+  // Trust exactly the configured number of proxy hops, so req.ip and rate limiting
+  // see the real client and X-Forwarded-For cannot be spoofed past them.
+  app.set('trust proxy', env.TRUST_PROXY);
 
   // Secure headers (CSP, HSTS, no-sniff, etc.).
   app.use(helmet());

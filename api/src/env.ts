@@ -17,6 +17,11 @@ const EnvSchema = z
     API_BASE_URL: z.string().url().default('http://localhost:4000'),
     WEB_ORIGIN: z.string().url().default('http://localhost:5180'),
 
+    // Number of proxy hops to trust for the client IP (rate limiting, audit).
+    // Must match the deployment: set to the exact count of trusted proxies so a
+    // client cannot spoof X-Forwarded-For. 0 disables proxy trust.
+    TRUST_PROXY: z.coerce.number().int().min(0).max(10).default(1),
+
     DATABASE_URL: z
       .string()
       .url()

@@ -14,8 +14,8 @@ const createSchema = z
     landingPageId: z.string().optional(),
     scheduledAt: z.coerce.date().optional(),
     dripPerMin: z.number().int().min(1).max(600).optional(),
-    targetIds: z.array(z.string()).optional(),
-    groups: z.array(z.string()).optional(),
+    targetIds: z.array(z.string().max(60)).max(1000).optional(),
+    groups: z.array(z.string().max(60)).max(100).optional(),
   })
   .refine((v) => (v.targetIds?.length ?? 0) > 0 || (v.groups?.length ?? 0) > 0, {
     message: 'Provide targetIds or groups',
